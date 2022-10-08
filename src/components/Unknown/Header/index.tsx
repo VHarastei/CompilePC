@@ -3,6 +3,7 @@ import AppBar from '@mui/material/AppBar';
 import { Button } from '@mui/material';
 import { Box, Container } from '@mui/system';
 import { AppLogo } from '../Icons';
+import Search from '../Search';
 
 const Header: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const Header: React.FC = () => {
           paddingY={2}
         >
           <AppLogo />
+          <Search />
           <Box display="flex" gap={4}>
             <Button color="primary" variant="contained">
               Log In

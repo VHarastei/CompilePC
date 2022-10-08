@@ -13,6 +13,7 @@ import useStyles from './styles';
 import { BuildProduct } from '../BuilderProduct';
 import { BuildScreenContext } from '../../../BuildScreenContext';
 import { BuilderCategory } from '../../../../../../types';
+import Search from '../../../Search';
 
 type ProductAccordionProps = {
   icon: React.FC;
@@ -75,6 +76,7 @@ const ProductAccordion: React.FC<ProductAccordionProps> = ({
           {selectedId ? selectedProduct?.name : `${category} is not selected`}
         </Typography>
       </AccordionSummary>
+      <Search />
       <AccordionDetails>{children}</AccordionDetails>
     </Accordion>
   );
