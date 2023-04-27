@@ -5,10 +5,14 @@ import {
   CategoryName,
   CPU,
   PSU,
+  RAM,
+  Motherboard,
 } from '../../types';
 import formCPUSpecs from './cpuSpecs';
 import formGPUSpecs from './gpuSpecs';
+import formMotherboardSpecs from './motherboardSpecs';
 import formPSUSpecs from './psuSpecs';
+import formRAMSpecs from './ramSpecs';
 
 const getSpecsTable = (
   product: Part | undefined,
@@ -27,9 +31,9 @@ const getSpecsTable = (
     case 'PSU':
       return formPSUSpecs(product as PSU);
     case 'RAM':
-      return null;
+      return formRAMSpecs(product as RAM);
     case 'motherboard':
-      return null;
+      return formMotherboardSpecs(product as Motherboard);
     case 'case':
       return null;
     case 'cooling':

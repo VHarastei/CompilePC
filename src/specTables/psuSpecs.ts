@@ -9,7 +9,7 @@ const formPSUSpecs = (product: PSU): SpecBlock[] => [
         value: product.power,
       },
       {
-        title: 'Form-factor',
+        title: 'Form factor',
         value: product.formFactor,
       },
     ],
