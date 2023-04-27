@@ -1,6 +1,14 @@
-import { SpecBlock, GraphicsCard, Part, CategoryName, CPU } from '../../types';
+import {
+  SpecBlock,
+  GraphicsCard,
+  Part,
+  CategoryName,
+  CPU,
+  PSU,
+} from '../../types';
 import formCPUSpecs from './cpuSpecs';
 import formGPUSpecs from './gpuSpecs';
+import formPSUSpecs from './psuSpecs';
 
 const getSpecsTable = (
   product: Part | undefined,
@@ -17,7 +25,7 @@ const getSpecsTable = (
     case 'SSD':
       return null;
     case 'PSU':
-      return null;
+      return formPSUSpecs(product as PSU);
     case 'RAM':
       return null;
     case 'motherboard':
