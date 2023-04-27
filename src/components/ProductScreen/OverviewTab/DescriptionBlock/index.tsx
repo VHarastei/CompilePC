@@ -20,14 +20,18 @@ const DescriptionBlock: React.FC<DescriptionBlockProps> = ({
         Description
       </Typography>
       <Paper className={styles.descriptionPaper}>
-        <Typography className={styles.description} gutterBottom>
-          {isLoading
-            ? Array.from(new Array(8)).map((element, index) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <Skeleton variant="text" animation="wave" key={index} />
-              ))
-            : description}
-        </Typography>
+        {isLoading ? (
+          Array.from(new Array(8)).map((element, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Skeleton variant="text" animation="wave" key={index} />
+          ))
+        ) : (
+          <Typography
+            className={styles.description}
+            dangerouslySetInnerHTML={{ __html: description }}
+            gutterBottom
+          />
+        )}
       </Paper>
     </Box>
   );

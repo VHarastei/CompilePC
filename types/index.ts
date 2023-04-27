@@ -41,22 +41,22 @@ export type Store = {
 
 // collection CPUs
 export type CPU = Product & {
-  series?: string;
-  codeName?: string;
-  socket?: string;
+  series: string;
+  codeName: string;
+  socket: string;
   litography?: string;
-  cores?: string;
-  threads?: string;
-  clockSpeed?: string;
-  turboBoost?: string;
+  cores: string;
+  threads: string;
+  clockSpeed: string;
+  turboBoost: string;
   l1Cache?: string;
-  l2Cache?: string;
-  l3Cache?: string;
-  IGP?: string;
-  TDP?: string;
-  PSIExpress?: string;
+  l2Cache: string;
+  l3Cache: string;
+  IGP: string;
+  TDP: string;
+  PSIExpress: string;
   maxOperatingTemperature?: string;
-  maxDDR4Speed?: string;
+  maxDDR4Speed: string;
   channels?: string;
 };
 
@@ -278,10 +278,10 @@ export type CategoryName = keyof typeof ProductCategories;
 
 // Product builders
 export type BuilderCategory =
-  typeof ProductCategories[CategoryName]['builderTitle'];
+  (typeof ProductCategories)[CategoryName]['builderTitle'];
 
 export type CollectionName =
-  typeof ProductCategories[CategoryName]['collectionName'];
+  (typeof ProductCategories)[CategoryName]['collectionName'];
 
 export type Part =
   | CPU
@@ -294,7 +294,10 @@ export type Part =
   | Cooling
   | PSU;
 
-export type Spec = { title: string; value: string | boolean | number };
+export type Spec = {
+  title: string;
+  value: string | boolean | number | undefined;
+};
 
 export type SpecBlock = {
   name: string;

@@ -4,7 +4,7 @@ export const DEFAULT_REGION = 'europe-central2';
 export const EKATALOG_LINK = 'https://ek.ua';
 export const EKATALOG_LIST_LINK = `${EKATALOG_LINK}/en/list/`;
 export const CATEGORIES_COLLECTION_NAME = 'categories';
-export const DB_NAME = 'CompilePC';
+export const DB_NAME = 'COMPILEPC_DB';
 
 export const RAM_COLOR_DIVS = '.small-col-plate2';
 export const CASE_COLOR_DIVS = '.descr-color';
