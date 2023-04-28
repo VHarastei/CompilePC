@@ -4,10 +4,10 @@ import { Theme } from '@mui/system';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     description: {
-      padding: theme.spacing(4),
       textAlign: 'justify',
     },
     descriptionPaper: {
+      padding: theme.spacing(4),
       width: '100% !important',
     },
   }),
