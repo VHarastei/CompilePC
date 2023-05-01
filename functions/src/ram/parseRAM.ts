@@ -19,11 +19,15 @@ const parseRAM = async (productId: string, page: Page): Promise<RAM | null> => {
 
   const mainImageContainer = await getParsingElement('.img200', page);
   const mainImage = await page.evaluate(
-    (el) => el.lastElementChild.getAttribute('srcset').split(' ')[0],
+    (el) => el.lastElementChild.getAttribute('src').split(' ')[0],
     mainImageContainer,
   );
 
-  const description = await parseElementInnerHTML('.conf-desc-ai-title', page);
+  const descriptionText = await parseElementText('.conf-desc-ai-title', page);
+
+  const description =
+    descriptionText &&
+    (await parseElementInnerHTML('.conf-desc-ai-title', page));
 
   const specsTable = await getParsingElement('#help_table', page);
 
@@ -63,26 +67,28 @@ const parseRAM = async (productId: string, page: Page): Promise<RAM | null> => {
 
   const price = await parsePrices(page);
 
-  return {
-    id: productId,
-    name,
-    mainImage,
-    price,
-    brand,
-    description: description || undefined,
-    colour: specs?.colour,
-    capacity: specs?.memoryCapacity,
-    modules: specs?.memoryModules,
-    formFactor: specs?.formFactor,
-    type: specs?.type,
-    speed: specs?.memorySpeed,
-    clockSpeed: specs?.clockSpeed,
-    timing: specs?.memoryTiming,
-    voltage: specs?.voltage,
-    cooling: specs?.cooling,
-    moduleProfile: specs?.moduleProfile,
-    moduleHeight: specs?.moduleHeight,
-  };
+  return price
+    ? {
+        id: productId,
+        name,
+        mainImage,
+        price,
+        brand,
+        description: description || undefined,
+        colour: specs?.colour,
+        capacity: specs?.memoryCapacity,
+        modules: specs?.memoryModules,
+        formFactor: specs?.formFactor,
+        type: specs?.type,
+        speed: specs?.memorySpeed,
+        clockSpeed: specs?.clockSpeed,
+        timing: specs?.memoryTiming,
+        voltage: specs?.voltage,
+        cooling: specs?.cooling,
+        moduleProfile: specs?.moduleProfile,
+        moduleHeight: specs?.moduleHeight,
+      }
+    : null;
 };
 
 export default parseRAM;

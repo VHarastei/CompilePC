@@ -16,6 +16,10 @@ const formCPUSpecs = (product: CPU): SpecBlock[] => [
         title: 'Socket',
         value: product.socket,
       },
+      {
+        title: 'Lithography',
+        value: product.lithography,
+      },
     ],
   },
   {
@@ -74,7 +78,7 @@ const formCPUSpecs = (product: CPU): SpecBlock[] => [
       },
       {
         title: 'PCI Express support',
-        value: product.PSIExpress,
+        value: product.PCIExpress,
       },
       {
         title: 'Max. operating temperature',

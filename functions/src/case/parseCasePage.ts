@@ -14,7 +14,10 @@ const parseCasePage = async (
   productId: string,
   page: Page,
 ): Promise<Case | null> => {
-  const description = await parseElementInnerHTML('.desc-ai-title', page);
+  const descriptionText = await parseElementText('.desc-ai-title', page);
+
+  const description =
+    descriptionText && (await parseElementInnerHTML('.desc-ai-title', page));
 
   await page.waitForXPath(xPathSelectors.specificationButton);
   const anchor = (await page.$x(xPathSelectors.specificationButton)) as any;
@@ -29,7 +32,7 @@ const parseCasePage = async (
 
   const mainImageContainer = await getParsingElement('.img200', page);
   const mainImage = await page.evaluate(
-    (el) => el.lastElementChild.getAttribute('srcset').split(' ')[0],
+    (el) => el.lastElementChild.getAttribute('src').split(' ')[0],
     mainImageContainer,
   );
 
@@ -94,44 +97,46 @@ const parseCasePage = async (
 
   const price = await parsePrices(page);
 
-  return {
-    id: productId,
-    name,
-    mainImage,
-    brand,
-    description: description || undefined,
-    price,
-    officialWebsite: specs?.officialWebsite,
-    colour: specs?.colour,
-    target: specs?.features,
-    mount: specs?.mount,
-    motherboardFormFactor: specs?.mount,
-    boardPlacement: specs?.boardPlacement,
-    psuMaxLength: specs?.psuMaxLength,
-    gpuMaxLength: specs?.gpuMaxLength,
-    rubberFeet: specs?.rubberFeet,
-    PSU: specs?.PSU,
-    psuMount: specs?.psuMount,
-    expansionSlots: +specs?.expansionSlots,
-    openMechanism: specs?.openMechanism,
-    fansTotal: specs?.fansTotal,
-    fansInfo: fansSizes,
-    fansMountTotal: +specs?.fansMountTotal,
-    gridFrontPanel: specs?.gridFrontPanel,
-    dustFilter: specs?.dustFilter,
-    liquidCoolingSupport: specs?.liquidCoolingSupport,
-    liquidPlacement: specs?.placement,
-    liquidCoolingMountsTotal: +specs?.liquidCoolingMounts,
-    liquidCoolingInfo: liquidFansSizes,
-    usb32Gen1: +specs?.uSB32Gen1,
-    usb32Gen2: +specs?.uSB32Gen2,
-    usb20: +specs?.usb20,
-    audioPort: specs['audio(Microphoneheadphones)'],
-    material: specs?.material,
-    frontPanel: specs?.frontPanel,
-    weight: specs?.weight,
-    size: specs?.size,
-  };
+  return price
+    ? {
+        id: productId,
+        name,
+        mainImage,
+        brand,
+        description: description || undefined,
+        price,
+        officialWebsite: specs?.officialWebsite,
+        colour: specs?.colour,
+        target: specs?.features,
+        mount: specs?.mount,
+        motherboardFormFactor: specs?.mount,
+        boardPlacement: specs?.boardPlacement,
+        psuMaxLength: specs?.psuMaxLength,
+        gpuMaxLength: specs?.gpuMaxLength,
+        rubberFeet: specs?.rubberFeet,
+        PSU: specs?.PSU,
+        psuMount: specs?.psuMount,
+        expansionSlots: +specs?.expansionSlots,
+        openMechanism: specs?.openMechanism,
+        fansTotal: specs?.fansTotal,
+        fansInfo: fansSizes,
+        fansMountTotal: +specs?.fansMountTotal,
+        gridFrontPanel: specs?.gridFrontPanel,
+        dustFilter: specs?.dustFilter,
+        liquidCoolingSupport: specs?.liquidCoolingSupport,
+        liquidPlacement: specs?.placement,
+        liquidCoolingMountsTotal: +specs?.liquidCoolingMounts,
+        liquidCoolingInfo: liquidFansSizes,
+        usb32Gen1: +specs?.uSB32Gen1,
+        usb32Gen2: +specs?.uSB32Gen2,
+        usb20: +specs?.usb20,
+        audioPort: specs['audio(Microphoneheadphones)'],
+        material: specs?.material,
+        frontPanel: specs?.frontPanel,
+        weight: specs?.weight,
+        size: specs?.size,
+      }
+    : null;
 };
 
 export default parseCasePage;

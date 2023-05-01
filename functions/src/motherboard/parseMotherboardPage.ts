@@ -13,7 +13,10 @@ const parseMotherboardPage = async (
   productId: string,
   page: Page,
 ): Promise<Motherboard | null> => {
-  const description = await parseElementInnerHTML('.desc-ai-title', page);
+  const descriptionText = await parseElementText('.desc-ai-title', page);
+
+  const description =
+    descriptionText && (await parseElementInnerHTML('.desc-ai-title', page));
 
   const brand = await parseElementText('.path_lnk_brand', page);
 
@@ -28,7 +31,7 @@ const parseMotherboardPage = async (
 
   const mainImageContainer = await getParsingElement('.img200', page);
   const mainImage = await page.evaluate(
-    (el) => el.lastElementChild.getAttribute('srcset').split(' ')[0],
+    (el) => el.lastElementChild.getAttribute('src').split(' ')[0],
     mainImageContainer,
   );
 
@@ -69,46 +72,48 @@ const parseMotherboardPage = async (
 
   const price = await parsePrices(page);
 
-  return {
-    id: productId,
-    name,
-    mainImage,
-    price,
-    brand,
-    description: description || undefined,
-    socket: specs?.socket,
-    formFactor: specs?.formFactor as MotherboardFormFactor,
-    powerPhases: specs?.powerPhases,
-    VRMHeatsink: !!!specs?.vRMHeatsink,
-    size: specs?.['size(HxW)'], // e.g. 226x211 mm
-    chipset: specs?.chipset,
-    BIOS: specs?.BIOS,
-    DDR4: specs?.DDR4,
-    memoryModule: specs?.memoryModule,
-    operationMode: specs?.operationMode,
-    maxClockFrequency: specs?.maxClockFrequency,
-    maxMemory: specs?.maxMemory,
-    VGA: !!!specs?.['dSubOutput(VGA)'],
-    HDMI: !!!specs?.hDMIOutput,
-    HDMIVersion: specs?.hDMIVersion,
-    displayPort: !!!specs?.displayPort,
-    displayPortVersion: specs?.displayPortVersion,
-    audiochip: specs?.audiochip,
-    sound: specs?.['sound(Channels)'],
-    sata3: specs?.['sATA3(6Gbs)'],
-    m2: specs?.['M.2'],
-    PSI_E_16x: specs?.pCIE16xSlots,
-    PCIExpressVerison: specs?.pCIExpress,
-    ExternalUSB_2_0: specs?.['USB 2.0'],
-    ExternalUSB_3_2_gen1: specs?.uSB32Gen1,
-    ExternalUSB_3_2_gen2: specs?.uSB32Gen2,
-    InternalUSB_2_0: specs?.['USB 2.0Internal'],
-    InternalUSB_3_2_gen1: specs?.uSB32Gen1Internal,
-    InternalUSB_3_2_gen2: specs?.uSB32Gen2Internal,
-    mainPowerSocket: specs?.mainPowerSocket,
-    CPUPowerSocket: specs?.cPUPower,
-    FanPowerConnectors: specs?.FanPowerConnectors,
-  };
+  return price
+    ? {
+        id: productId,
+        name,
+        mainImage,
+        price,
+        brand,
+        description: description || undefined,
+        socket: specs?.socket,
+        formFactor: specs?.formFactor as MotherboardFormFactor,
+        powerPhases: specs?.powerPhases,
+        VRMHeatsink: !!!specs?.vRMHeatsink,
+        size: specs?.['size(HxW)'], // e.g. 226x211 mm
+        chipset: specs?.chipset,
+        BIOS: specs?.BIOS,
+        DDR4: specs?.DDR4,
+        memoryModule: specs?.memoryModule,
+        operationMode: specs?.operationMode,
+        maxClockFrequency: specs?.maxClockFrequency,
+        maxMemory: specs?.maxMemory,
+        VGA: !!!specs?.['dSubOutput(VGA)'],
+        HDMI: !!!specs?.hDMIOutput,
+        HDMIVersion: specs?.hDMIVersion,
+        displayPort: !!!specs?.displayPort,
+        displayPortVersion: specs?.displayPortVersion,
+        audiochip: specs?.audiochip,
+        sound: specs?.['sound(Channels)'],
+        sata3: specs?.['sATA3(6Gbs)'],
+        m2: specs?.['M.2'],
+        PSI_E_16x: specs?.pCIE16xSlots,
+        PCIExpressVerison: specs?.pCIExpress,
+        ExternalUSB_2_0: specs?.['USB 2.0'],
+        ExternalUSB_3_2_gen1: specs?.uSB32Gen1,
+        ExternalUSB_3_2_gen2: specs?.uSB32Gen2,
+        InternalUSB_2_0: specs?.['USB 2.0Internal'],
+        InternalUSB_3_2_gen1: specs?.uSB32Gen1Internal,
+        InternalUSB_3_2_gen2: specs?.uSB32Gen2Internal,
+        mainPowerSocket: specs?.mainPowerSocket,
+        CPUPowerSocket: specs?.cPUPower,
+        FanPowerConnectors: specs?.FanPowerConnectors,
+      }
+    : null;
 };
 
 export default parseMotherboardPage;

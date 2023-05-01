@@ -19,11 +19,15 @@ const parseHardDrivePage = async (
 
   const mainImageContainer = await getParsingElement('.img200', page);
   const mainImage = await page.evaluate(
-    (el) => el.lastElementChild.getAttribute('srcset').split(' ')[0],
+    (el) => el.lastElementChild.getAttribute('src').split(' ')[0],
     mainImageContainer,
   );
 
-  const description = await parseElementInnerHTML('.conf-desc-ai-title', page);
+  const descriptionText = await parseElementText('.conf-desc-ai-title', page);
+
+  const description =
+    descriptionText &&
+    (await parseElementInnerHTML('.conf-desc-ai-title', page));
 
   const specsTable = await getParsingElement('#help_table', page);
 
@@ -66,27 +70,29 @@ const parseHardDrivePage = async (
 
   const price = await parsePrices(page);
 
-  return {
-    id: productId,
-    name,
-    mainImage,
-    price,
-    brand,
-    description: description || undefined,
-    placement: specs.placement,
-    type: specs.type,
-    capacity: specs.size,
-    formFactor: specs.formFactor,
-    cacheMemory: specs.cacheMemory,
-    recordTechnology: specs.recordTechnology,
-    RPM: specs.RPM,
-    dataTransferRate: specs.dataTransferRate,
-    operationPowerConsumption: specs.operationPowerConsumption,
-    standbyPowerConsumption: specs.standbyPowerConsumption,
-    MTBF: specs.MTBF,
-    size: specs.sizeDimensions,
-    weight: specs.weight,
-  };
+  return price
+    ? {
+        id: productId,
+        name,
+        mainImage,
+        price,
+        brand,
+        description: description || undefined,
+        placement: specs.placement,
+        type: specs.type,
+        capacity: specs.size,
+        formFactor: specs.formFactor,
+        cacheMemory: specs.cacheMemory,
+        recordTechnology: specs.recordTechnology,
+        RPM: specs.RPM,
+        dataTransferRate: specs.dataTransferRate,
+        operationPowerConsumption: specs.operationPowerConsumption,
+        standbyPowerConsumption: specs.standbyPowerConsumption,
+        MTBF: specs.MTBF,
+        size: specs.sizeDimensions,
+        weight: specs.weight,
+      }
+    : null;
 };
 
 export default parseHardDrivePage;

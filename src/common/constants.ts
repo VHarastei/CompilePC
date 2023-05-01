@@ -68,19 +68,18 @@ const ProductCategories = {
   SSD: {
     categoryName: 'SSD',
     builderTitle: 'SSD',
-    collectionName: 'SSD',
+    collectionName: 'solidStateDrives',
   },
   HDD: {
     categoryName: 'HDD',
     builderTitle: 'HDD',
-    collectionName: 'HDD',
+    collectionName: 'hardDrives',
   },
 } as const;
 
 const ProductPageTabs = [
   { value: '', label: 'Overview' },
   { value: 'stores', label: 'Stores' },
-  { value: 'reviews', label: 'Reviews' },
 ];
 
 const ROUTES = {

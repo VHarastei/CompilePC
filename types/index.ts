@@ -17,6 +17,8 @@ export type PriceRange = {
   maxPrice: number;
 };
 
+export type ParsedPrice = Price | null;
+
 export type Price = {
   offers: Offer[];
   range: PriceRange;
@@ -44,7 +46,7 @@ export type CPU = Product & {
   series: string;
   codeName: string;
   socket: string;
-  litography?: string;
+  lithography?: string;
   cores: string;
   threads: string;
   clockSpeed: string;
@@ -54,7 +56,7 @@ export type CPU = Product & {
   l3Cache: string;
   IGP: string;
   TDP: string;
-  PSIExpress: string;
+  PCIExpress: string;
   maxOperatingTemperature?: string;
   maxDDR4Speed: string;
   channels?: string;

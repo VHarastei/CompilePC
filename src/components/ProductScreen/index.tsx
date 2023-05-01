@@ -107,7 +107,6 @@ const ProductScreen: React.FC = () => {
               />
             }
           />
-          <Route path="/reviews" element={<div>Nothing yet</div>} />
           <Route
             path="/stores"
             element={

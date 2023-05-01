@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paper, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useSelector } from 'react-redux';
 import { selectBuilders } from '../../../store/builder/selectors';
@@ -31,12 +31,6 @@ const BuildersList = () => {
           Main Parts
         </Typography>
         <MainBuilder />
-      </Box>
-      <Box>
-        <Typography gutterBottom variant="h2">
-          Periphery
-        </Typography>
-        <Paper>biba</Paper>
       </Box>
     </Box>
   );

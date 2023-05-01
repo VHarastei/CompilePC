@@ -18,11 +18,15 @@ const parseCPUPage = async (
 
   const mainImageContainer = await getParsingElement('.img200', page);
   const mainImage = await page.evaluate(
-    (el) => el.lastElementChild.getAttribute('srcset').split(' ')[0],
+    (el) => el.lastElementChild.getAttribute('src').split(' ')[0],
     mainImageContainer,
   );
 
-  const description = await parseElementInnerHTML('.desc-exp-text', page);
+  const descriptionText = await parseElementText('.conf-desc-ai-title', page);
+
+  const description =
+    descriptionText &&
+    (await parseElementInnerHTML('.conf-desc-ai-title', page));
 
   const specsTable = await getParsingElement('#help_table', page);
 
@@ -57,33 +61,35 @@ const parseCPUPage = async (
 
   const price = await parsePrices(page);
 
-  return {
-    id: productId,
-    name,
-    mainImage,
-    brand,
-    description: description || undefined,
-    price,
-    officialWebsite: specs?.officialWebsite,
-    manufacturer: specs?.manufacturer,
-    series: specs?.series,
-    codeName: specs?.codeName,
-    socket: specs?.socket,
-    litography: specs?.litography,
-    cores: specs?.cores,
-    threads: specs?.threads,
-    clockSpeed: specs?.clockSpeed,
-    turboBoost: specs?.turboBoostTurboCore,
-    l1Cache: specs?.totalL1Cache,
-    l2Cache: specs?.totalL2Cache,
-    l3Cache: specs?.totalL2Cache,
-    IGP: specs?.IGP,
-    TDP: specs?.TDP,
-    PSIExpress: specs?.pCIExpress,
-    maxOperatingTemperature: specs?.maxOperatingTemperature,
-    maxDDR4Speed: specs?.maxDDR4Speed,
-    channels: specs?.channels,
-  };
+  return price
+    ? {
+        id: productId,
+        name,
+        mainImage,
+        brand,
+        description: description || undefined,
+        price,
+        officialWebsite: specs?.officialWebsite,
+        manufacturer: specs?.manufacturer,
+        series: specs?.series,
+        codeName: specs?.codeName,
+        socket: specs?.socket,
+        lithography: specs?.lithography,
+        cores: specs?.cores,
+        threads: specs?.threads,
+        clockSpeed: specs?.clockSpeed,
+        turboBoost: specs?.turboBoostTurboCore,
+        l1Cache: specs?.totalL1Cache,
+        l2Cache: specs?.totalL2Cache,
+        l3Cache: specs?.totalL2Cache,
+        IGP: specs?.IGP,
+        TDP: specs?.TDP,
+        PCIExpress: specs?.pCIExpress,
+        maxOperatingTemperature: specs?.maxOperatingTemperature,
+        maxDDR4Speed: specs?.maxDDR4Speed,
+        channels: specs?.channels,
+      }
+    : null;
 };
 
 export default parseCPUPage;

@@ -13,7 +13,11 @@ const parsePSUpage = async (
   productId: string,
   page: Page,
 ): Promise<PSU | null> => {
-  const description = await parseElementInnerHTML('.conf-desc-ai-title', page);
+  const descriptionText = await parseElementText('.conf-desc-ai-title', page);
+
+  const description =
+    descriptionText &&
+    (await parseElementInnerHTML('.conf-desc-ai-title', page));
 
   const name = await parseElementText('.op1-tt', page);
 
@@ -21,7 +25,7 @@ const parsePSUpage = async (
 
   const mainImageContainer = await getParsingElement('.img200', page);
   const mainImage = await page.evaluate(
-    (el) => el.lastElementChild.getAttribute('srcset').split(' ')[0],
+    (el) => el.lastElementChild.getAttribute('src').split(' ')[0],
     mainImageContainer,
   );
 
@@ -61,35 +65,37 @@ const parsePSUpage = async (
 
   const price = await parsePrices(page);
 
-  return {
-    id: productId,
-    name,
-    mainImage,
-    price,
-    brand,
-    description: description || undefined,
-    officialWebsite: specs?.officialWebsite,
-    power: specs?.power,
-    formFactor: specs?.formFactor,
-    PFC: specs?.PFC,
-    efficiency: specs?.efficiency,
-    coolingSystem: specs?.coolingSystem,
-    fanSize: specs?.fanSize,
-    fanBearings: specs?.fanBearing,
-    certification: specs?.certification,
-    atx12vVersion: +specs?.aTX12VVersion,
-    powerSupply: specs?.mBCPUPowerSupply,
-    SATA: +specs?.SATA,
-    MOLEX: +specs?.MOLEX,
-    PCIE8pin: +specs['pCIE8pin(6+2)'],
-    cableSystem: specs?.cableSystem,
-    braidedWires: !specs?.braidedWires,
-    mbCableLength: specs?.MB,
-    cpuCableLength: specs?.CPU,
-    sataCableLength: specs?.SATADimensions,
-    molexCableLength: specs?.MOLEXDimensions,
-    PCIECableLength: specs['PCI-E'],
-  };
+  return price
+    ? {
+        id: productId,
+        name,
+        mainImage,
+        price,
+        brand,
+        description: description || undefined,
+        officialWebsite: specs?.officialWebsite,
+        power: specs?.power,
+        formFactor: specs?.formFactor,
+        PFC: specs?.PFC,
+        efficiency: specs?.efficiency,
+        coolingSystem: specs?.coolingSystem,
+        fanSize: specs?.fanSize,
+        fanBearings: specs?.fanBearing,
+        certification: specs?.certification,
+        atx12vVersion: +specs?.aTX12VVersion,
+        powerSupply: specs?.mBCPUPowerSupply,
+        SATA: +specs?.SATA,
+        MOLEX: +specs?.MOLEX,
+        PCIE8pin: +specs['pCIE8pin(6+2)'],
+        cableSystem: specs?.cableSystem,
+        braidedWires: !specs?.braidedWires,
+        mbCableLength: specs?.MB,
+        cpuCableLength: specs?.CPU,
+        sataCableLength: specs?.SATADimensions,
+        molexCableLength: specs?.MOLEXDimensions,
+        PCIECableLength: specs['PCI-E'],
+      }
+    : null;
 };
 
 export default parsePSUpage;

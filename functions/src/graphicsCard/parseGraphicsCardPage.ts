@@ -18,11 +18,15 @@ const parseGraphicsCardPage = async (
 
   const mainImageContainer = await getParsingElement('.img200', page);
   const mainImage = await page.evaluate(
-    (el) => el.lastElementChild.getAttribute('srcset').split(' ')[0],
+    (el) => el.lastElementChild.getAttribute('src').split(' ')[0],
     mainImageContainer,
   );
 
-  const description = await parseElementInnerHTML('.conf-desc-ai-title', page);
+  const descriptionText = await parseElementText('.conf-desc-ai-title', page);
+
+  const description =
+    descriptionText &&
+    (await parseElementInnerHTML('.conf-desc-ai-title', page));
 
   const specsTable = await getParsingElement('#help_table', page);
 
@@ -58,44 +62,46 @@ const parseGraphicsCardPage = async (
     specs[camelName] = removeNonBreakingSpace(value);
   });
 
-  const price = await parsePrices(page);
-
   const brand = specs.gPUModel.split(' ')[0];
 
-  return {
-    id: productId,
-    name,
-    mainImage,
-    price,
-    brand,
-    vendor,
-    description: description || undefined,
-    interface: specs?.interface,
-    GPUModel: specs?.gPUModel,
-    memorySize: specs?.memorySize,
-    memoryType: specs?.memoryType,
-    memoryBus: specs?.memoryBus,
-    GPUClockSpeed: specs?.gPUClockSpeed,
-    litography: specs?.litography,
-    maxResolution: specs?.maxResolution,
-    HDMI: specs?.HDMI,
-    HDMIVersion: specs?.hDMIVersion,
-    displayPort: specs?.displayPort,
-    displayPortVersion: specs?.displayPortVersion,
-    directX: specs?.directX,
-    openGL: specs?.openGL,
-    isVRReady: !!!specs?.VR,
-    streamProcessors: specs?.streamProcessors,
-    textureUnits: specs?.textureUnits,
-    monitorsConnection: specs?.monitorsConnection,
-    cooling: specs?.cooling,
-    fans: specs?.fans,
-    additionalPower: specs?.additionalPower,
-    minPSU: specs?.minimumPSURecommendation,
-    numberOfSlots: specs?.numberOfSlots,
-    // taken from e-katalog: Length	200 mm / 200x123x38 /
-    size: specs?.length,
-  };
+  const price = await parsePrices(page);
+
+  return price
+    ? {
+        id: productId,
+        name,
+        mainImage,
+        price,
+        brand,
+        vendor,
+        description: description || undefined,
+        interface: specs?.interface,
+        GPUModel: specs?.gPUModel,
+        memorySize: specs?.memorySize,
+        memoryType: specs?.memoryType,
+        memoryBus: specs?.memoryBus,
+        GPUClockSpeed: specs?.gPUClockSpeed,
+        litography: specs?.litography,
+        maxResolution: specs?.maxResolution,
+        HDMI: specs?.HDMI,
+        HDMIVersion: specs?.hDMIVersion,
+        displayPort: specs?.displayPort,
+        displayPortVersion: specs?.displayPortVersion,
+        directX: specs?.directX,
+        openGL: specs?.openGL,
+        isVRReady: !!!specs?.VR,
+        streamProcessors: specs?.streamProcessors,
+        textureUnits: specs?.textureUnits,
+        monitorsConnection: specs?.monitorsConnection,
+        cooling: specs?.cooling,
+        fans: specs?.fans,
+        additionalPower: specs?.additionalPower,
+        minPSU: specs?.minimumPSURecommendation,
+        numberOfSlots: specs?.numberOfSlots,
+        // taken from e-katalog: Length	200 mm / 200x123x38 /
+        size: specs?.length,
+      }
+    : null;
 };
 
 export default parseGraphicsCardPage;

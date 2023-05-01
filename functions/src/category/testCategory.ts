@@ -1,4 +1,4 @@
-import { Case } from './../../../types/index';
+import { GraphicsCard } from './../../../types/index';
 import puppeteer from 'puppeteer-extra';
 import * as functions from 'firebase-functions';
 
@@ -11,7 +11,7 @@ import {
 } from '../common/constants';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import { getDB } from '../bootstrap';
-import parseCasePage from '../case/parseCasePage';
+import parseGraphicsCardPage from '../graphicsCard/parseGraphicsCardPage';
 
 puppeteer.use(StealthPlugin());
 
@@ -53,7 +53,7 @@ const testCategory = functions
           a.getAttribute('href'),
         ),
       );
-      const products: Case[] = []; // put your component type here
+      const products: GraphicsCard[] = []; // put your component type here
       for await (const link of productLinks) {
         if (!link) return;
 
@@ -64,18 +64,21 @@ const testCategory = functions
 
         const productId = link.replace(regexes.cleanLinkForProductId, '');
 
-        const parser = parseCasePage; // put YOUR parser here
+        const parser = parseGraphicsCardPage; // put YOUR parser here
         if (!parser) return;
 
         const product = await parser(productId, productPage);
-        if (!product) return;
+        if (!product) continue;
 
         const normalizedProduct = Object.fromEntries(
           Object.entries(product).filter(([, value]) => value),
-        ) as Case; // put your component type here as well
+        ) as GraphicsCard; // put your component type here as well
+
+        console.log(normalizedProduct);
 
         products.push(normalizedProduct);
       }
+
       const categoryCollectionRef = db.collection(category.name);
       const bulk = categoryCollectionRef.initializeUnorderedBulkOp();
 
