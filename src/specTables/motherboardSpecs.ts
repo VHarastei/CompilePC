@@ -120,7 +120,7 @@ const formMotherboardSpecs = (product: Motherboard): SpecBlock[] => [
     specs: [
       {
         title: 'PCI-E 16x slots',
-        value: product.PSI_E_16x,
+        value: product.PCI_E_16x,
       },
       {
         title: 'PCI Express version',

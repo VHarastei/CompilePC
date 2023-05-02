@@ -121,7 +121,7 @@ export type Motherboard = Product & {
   sound?: string;
   sata3?: string;
   m2?: string;
-  PSI_E_16x?: string;
+  PCI_E_16x?: string;
   PCIExpressVerison?: string;
   ExternalUSB_2_0?: string;
   ExternalUSB_3_2_gen1?: string;

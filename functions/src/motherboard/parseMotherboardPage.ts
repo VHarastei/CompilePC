@@ -101,7 +101,7 @@ const parseMotherboardPage = async (
         sound: specs?.['sound(Channels)'],
         sata3: specs?.['sATA3(6Gbs)'],
         m2: specs?.['M.2'],
-        PSI_E_16x: specs?.pCIE16xSlots,
+        PCI_E_16x: specs?.pCIE16xSlots,
         PCIExpressVerison: specs?.pCIExpress,
         ExternalUSB_2_0: specs?.['USB 2.0'],
         ExternalUSB_3_2_gen1: specs?.uSB32Gen1,
