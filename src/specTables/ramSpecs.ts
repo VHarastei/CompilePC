@@ -33,6 +33,10 @@ const formRAMSpecs = (product: RAM): SpecBlock[] => [
         value: product.clockSpeed,
       },
       {
+        title: 'CAS Latency',
+        value: product.casLatency,
+      },
+      {
         title: 'Memory timing',
         value: product.timing,
       },

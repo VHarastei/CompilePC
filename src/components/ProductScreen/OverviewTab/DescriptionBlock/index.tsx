@@ -15,7 +15,7 @@ const DescriptionBlock: React.FC<DescriptionBlockProps> = ({
   const styles = useStyles();
 
   return (
-    <Box>
+    <Box style={{ marginBottom: '20px' }}>
       <Typography variant="h4" gutterBottom>
         Description
       </Typography>

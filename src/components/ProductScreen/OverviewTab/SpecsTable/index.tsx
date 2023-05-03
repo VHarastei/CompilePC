@@ -32,7 +32,7 @@ const SpecsTable: React.FC<SpecsTableProps> = ({
   return (
     <Box>
       <Typography variant="h4" gutterBottom>
-        Specs
+        Specifications
       </Typography>
       <Paper className={styles.paperWrapper}>
         <Box className={styles.boxWrapper}>

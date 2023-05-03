@@ -110,14 +110,39 @@ const formMotherboardSpecs = (product: Motherboard): SpecBlock[] => [
         value: product.sata3,
       },
       {
+        title: 'M.2 connector',
+        value: product.m2connector,
+      },
+      {
         title: 'M.2',
         value: product.m2,
       },
     ],
   },
   {
+    name: 'Network interfaces',
+    specs: [
+      {
+        title: 'LAN (RJ-45)',
+        value: product.lanRJ45,
+      },
+      {
+        title: 'LAN ports',
+        value: product.lanPorts,
+      },
+      {
+        title: 'LAN controller',
+        value: product.lanController,
+      },
+    ],
+  },
+  {
     name: 'Expansion slots',
     specs: [
+      {
+        title: 'PCI-E 1x slots',
+        value: product.PCI_E_1x,
+      },
       {
         title: 'PCI-E 16x slots',
         value: product.PCI_E_16x,

@@ -73,6 +73,7 @@ const BuilderProduct: React.FC<ProductProps> = ({ product, category }) => {
                     <Typography
                       variant="h6"
                       marginRight={1}
+                      minWidth="100px"
                     >{`${spec.name}: `}</Typography>
                     <Typography fontWeight="bold">{spec.value}</Typography>
                   </Box>

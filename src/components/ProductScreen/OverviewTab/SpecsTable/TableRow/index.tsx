@@ -11,7 +11,7 @@ type TableRowProps = {
 const TableRow: React.FC<TableRowProps> = ({ spec }) => {
   const styles = useStyles();
 
-  if (typeof spec.value === 'undefined') {
+  if (!spec.value) {
     return null;
   }
 

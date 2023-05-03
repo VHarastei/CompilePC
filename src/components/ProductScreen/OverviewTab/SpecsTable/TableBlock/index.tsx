@@ -12,6 +12,10 @@ type TableBlockProps = {
 const TableBlock: React.FC<TableBlockProps> = ({ specBlock }) => {
   const styles = useStyles();
 
+  if (specBlock.specs.every((spec) => !spec.value)) {
+    return null;
+  }
+
   return (
     <Box className={styles.tableBlock}>
       <Typography variant="h4">{specBlock.name}</Typography>

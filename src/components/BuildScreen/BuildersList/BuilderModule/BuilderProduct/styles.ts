@@ -12,6 +12,8 @@ const useStyles = makeStyles((theme: Theme) =>
       '&:first-child': {
         border: 'none',
       },
+      paddingTop: theme.spacing(2),
+      paddingBottom: theme.spacing(2),
     },
     productName: {
       textDecoration: 'none',
@@ -27,6 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'flex-end',
+      minWidth: theme.spacing(50),
     },
     image: {
       width: '90px',
@@ -46,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
     specsWrapper: {
       display: 'flex',
       flexDirection: 'row',
-      alignItems: 'center',
+      alignItems: 'flex-start',
     },
   }),
 );

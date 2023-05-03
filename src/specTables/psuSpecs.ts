@@ -101,6 +101,19 @@ const formPSUSpecs = (product: PSU): SpecBlock[] => [
       },
     ],
   },
+  {
+    name: 'General',
+    specs: [
+      {
+        title: 'Dimensions (HxWxD)',
+        value: product.dimensions,
+      },
+      {
+        title: 'Weight',
+        value: product.weight,
+      },
+    ],
+  },
 ];
 
 export default formPSUSpecs;

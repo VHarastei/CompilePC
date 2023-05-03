@@ -4,7 +4,7 @@ const SSDformer = (product: SolidStateDrive): ShortSpec[] => [
   { name: 'Capacity', value: product.capacity },
   {
     name: 'Format',
-    value: `${product.formFactor}, ${product.m2Interface}`,
+    value: product.formFactor,
   },
   {
     name: 'NAND',

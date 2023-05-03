@@ -18,6 +18,10 @@ const formGPUSpecs = (product: GraphicsCard): SpecBlock[] => [
         value: product.GPUModel,
       },
       {
+        title: 'Architecture',
+        value: product.architecture,
+      },
+      {
         title: 'Memory size',
         value: product.memorySize,
       },
@@ -32,6 +36,14 @@ const formGPUSpecs = (product: GraphicsCard): SpecBlock[] => [
       {
         title: 'GPU clock speed',
         value: product.GPUClockSpeed,
+      },
+      {
+        title: 'Lithography',
+        value: product.lithography,
+      },
+      {
+        title: 'Max. resolution',
+        value: product.maxResolution,
       },
     ],
   },
