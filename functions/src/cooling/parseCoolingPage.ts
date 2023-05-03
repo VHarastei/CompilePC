@@ -77,7 +77,7 @@ const parseCoolingPage = async (
 
   const sockets = specs.socket?.split(',');
 
-  // console.log(sockets);
+  console.log(specs);
 
   await page.waitForXPath(xPathSelectors.pricesButton);
   const pricePageAnchor = (await page.$x(xPathSelectors.pricesButton)) as any;
@@ -87,8 +87,6 @@ const parseCoolingPage = async (
   ]);
 
   const price = await parsePrices(page);
-
-  // console.log(price);
 
   return price
     ? {
@@ -101,10 +99,10 @@ const parseCoolingPage = async (
         officialWebsite: specs?.officialWebsite,
         target: specs?.features,
         type: specs?.productType,
-        fans: +specs?.fans,
-        heatPipes: +specs?.heatPipes,
-        heatPipeContact: specs?.heatPipeContact,
-        heatSinkMaterial: specs?.heatSinkMaterial,
+        fans: specs?.numberOfFans,
+        heatPipes: specs?.heatPipes,
+        heatPipeContact: specs?.heatpipeContact,
+        heatSinkMaterial: specs?.heatsinkMaterial,
         plateMaterial: specs?.plateMaterial,
         mountType: specs?.mountType,
         socket: sockets,
@@ -117,7 +115,7 @@ const parseCoolingPage = async (
         maxTDP: specs?.maxTDP,
         airFlowDirection: specs?.airFlowDirection,
         replaceable: !specs?.replaceable,
-        staticPreasure: specs?.staticPreasure,
+        staticPressure: specs?.staticPressure,
         lighting: !specs?.lighting,
         lightingColour: specs?.lightingColour,
         powerSource: specs?.powerSource,

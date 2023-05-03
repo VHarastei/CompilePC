@@ -69,6 +69,7 @@ const parseMotherboardPage = async (
       ? (specs[`${camelName}Internal`] = removeNonBreakingSpace(value))
       : (specs[camelName] = removeNonBreakingSpace(value));
   });
+  console.log(specs);
 
   const price = await parsePrices(page);
 
@@ -100,7 +101,12 @@ const parseMotherboardPage = async (
         audiochip: specs?.audiochip,
         sound: specs?.['sound(Channels)'],
         sata3: specs?.['sATA3(6Gbs)'],
+        m2connector: specs?.m2Connector,
         m2: specs?.['M.2'],
+        lanRJ45: specs?.['LAN (RJ-45)'],
+        lanPorts: specs?.lANPorts,
+        lanController: specs?.lANController,
+        PCI_E_1x: specs?.['1xPCIESlots'],
         PCI_E_16x: specs?.pCIE16xSlots,
         PCIExpressVerison: specs?.pCIExpress,
         ExternalUSB_2_0: specs?.['USB 2.0'],
@@ -111,7 +117,7 @@ const parseMotherboardPage = async (
         InternalUSB_3_2_gen2: specs?.uSB32Gen2Internal,
         mainPowerSocket: specs?.mainPowerSocket,
         CPUPowerSocket: specs?.cPUPower,
-        FanPowerConnectors: specs?.FanPowerConnectors,
+        FanPowerConnectors: specs?.fanPowerConnectors,
       }
     : null;
 };

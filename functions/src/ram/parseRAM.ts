@@ -65,6 +65,8 @@ const parseRAM = async (productId: string, page: Page): Promise<RAM | null> => {
 
   if (colourArray) specs.colour = colourArray.join();
 
+  console.log(specs);
+
   const price = await parsePrices(page);
 
   return price
@@ -82,6 +84,7 @@ const parseRAM = async (productId: string, page: Page): Promise<RAM | null> => {
         type: specs?.type,
         speed: specs?.memorySpeed,
         clockSpeed: specs?.clockSpeed,
+        casLatency: specs?.cASLatency,
         timing: specs?.memoryTiming,
         voltage: specs?.voltage,
         cooling: specs?.cooling,

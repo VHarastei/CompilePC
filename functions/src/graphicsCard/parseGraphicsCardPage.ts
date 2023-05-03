@@ -64,6 +64,8 @@ const parseGraphicsCardPage = async (
 
   const brand = specs.gPUModel.split(' ')[0];
 
+  console.log(specs);
+
   const price = await parsePrices(page);
 
   return price
@@ -77,11 +79,12 @@ const parseGraphicsCardPage = async (
         description: description || undefined,
         interface: specs?.interface,
         GPUModel: specs?.gPUModel,
+        architecture: specs?.architecture,
         memorySize: specs?.memorySize,
         memoryType: specs?.memoryType,
         memoryBus: specs?.memoryBus,
         GPUClockSpeed: specs?.gPUClockSpeed,
-        litography: specs?.litography,
+        lithography: specs?.lithography,
         maxResolution: specs?.maxResolution,
         HDMI: specs?.HDMI,
         HDMIVersion: specs?.hDMIVersion,

@@ -68,6 +68,8 @@ const parseHardDrivePage = async (
       : (specs[camelName] = removeNonBreakingSpace(value));
   });
 
+  console.log(specs);
+
   const price = await parsePrices(page);
 
   return price
@@ -81,6 +83,10 @@ const parseHardDrivePage = async (
         placement: specs.placement,
         type: specs.type,
         capacity: specs.size,
+        material: specs?.material,
+        plates: specs?.plates,
+        averageSearchTime: specs?.averageSearchTime,
+        interface: specs?.interface,
         formFactor: specs.formFactor,
         cacheMemory: specs.cacheMemory,
         recordTechnology: specs.recordTechnology,

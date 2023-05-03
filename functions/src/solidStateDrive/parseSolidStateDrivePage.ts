@@ -68,6 +68,8 @@ const parseSolidStateDrivePage = async (
       : (specs[camelName] = removeNonBreakingSpace(value));
   });
 
+  console.log(specs);
+
   const price = await parsePrices(page);
 
   return price
@@ -78,23 +80,25 @@ const parseSolidStateDrivePage = async (
         price,
         brand,
         description: description || undefined,
-        placement: specs.placement,
-        capacity: specs.size,
-        formFactor: specs.formFactor,
-        m2Interface: specs.m2Interface,
-        controller: specs.controller,
-        cacheMemory: specs.cacheMemory,
-        memoryType: specs.memoryType,
-        nVMe: specs.nVMe,
-        writeSpeed: specs.writeSpeed,
-        readSpeed: specs.readSpeed,
-        writeIOPS: specs.writeIOPS,
-        readIOPS: specs.readIOPS,
-        TBW: specs.TBW,
-        MTBF: specs.MTBF,
-        trim: !!!specs.TRIM,
-        size: specs.sizeDimensions,
-        weight: specs.weight,
+        placement: specs?.placement,
+        capacity: specs?.size,
+        formFactor: specs?.formFactor,
+        m2Interface: specs?.m2Interface,
+        interface: specs?.interface,
+        controller: specs?.controller,
+        cacheMemory: specs?.cacheMemory,
+        memoryType: specs?.memoryType,
+        nVMe: specs?.nVMe,
+        material: specs?.material,
+        writeSpeed: specs?.writeSpeed,
+        readSpeed: specs?.readSpeed,
+        writeIOPS: specs?.writeIOPS,
+        readIOPS: specs?.readIOPS,
+        TBW: specs?.TBW,
+        MTBF: specs?.MTBF,
+        trim: !!!specs?.TRIM,
+        size: specs?.sizeDimensions,
+        weight: specs?.weight,
       }
     : null;
 };

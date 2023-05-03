@@ -97,6 +97,8 @@ const parseCasePage = async (
 
   const price = await parsePrices(page);
 
+  console.log(specs);
+
   return price
     ? {
         id: productId,
@@ -109,32 +111,39 @@ const parseCasePage = async (
         colour: specs?.colour,
         target: specs?.features,
         mount: specs?.mount,
-        motherboardFormFactor: specs?.mount,
+        fanMaxHeight: specs?.fanMaxHeight,
+        formFactor: specs?.formFactor,
+        motherboardFormFactor: specs?.motherboardSupport,
+        psuFormFactor: specs?.pSUFormFactor,
         boardPlacement: specs?.boardPlacement,
-        psuMaxLength: specs?.psuMaxLength,
-        gpuMaxLength: specs?.gpuMaxLength,
+        psuMaxLength: specs?.pSUMaxLength,
+        gpuMaxLength: specs?.graphicsCardMaxLenght,
         rubberFeet: specs?.rubberFeet,
         PSU: specs?.PSU,
-        psuMount: specs?.psuMount,
-        expansionSlots: +specs?.expansionSlots,
+        integratedPSUPower: specs?.integratedPSUPower,
+        psuMount: specs?.pSUMount,
+        dimensions: specs?.['dimensions(HxWxD)'],
+        expansionSlots: specs?.expansionSlots,
         openMechanism: specs?.openMechanism,
         fansTotal: specs?.fansTotal,
         fansInfo: fansSizes,
-        fansMountTotal: +specs?.fansMountTotal,
+        fansMountTotal: specs?.fanMountsTotal,
         gridFrontPanel: specs?.gridFrontPanel,
         dustFilter: specs?.dustFilter,
         liquidCoolingSupport: specs?.liquidCoolingSupport,
         liquidPlacement: specs?.placement,
-        liquidCoolingMountsTotal: +specs?.liquidCoolingMounts,
+        liquidCoolingMountsTotal: specs?.liquidCoolingMounts,
         liquidCoolingInfo: liquidFansSizes,
-        usb32Gen1: +specs?.uSB32Gen1,
-        usb32Gen2: +specs?.uSB32Gen2,
-        usb20: +specs?.usb20,
+        usb32Gen1: specs?.uSB32Gen1,
+        usb32Gen2: specs?.uSB32Gen2,
+        usbc32Gen2: specs?.uSBC32Gen2,
+        usb20: specs?.['USB 2.0'],
         audioPort: specs['audio(Microphoneheadphones)'],
         material: specs?.material,
+        bays35: specs?.['35"Bays'],
+        internal25Compartments: specs?.['internal25"Compartments'],
         frontPanel: specs?.frontPanel,
         weight: specs?.weight,
-        size: specs?.size,
       }
     : null;
 };
