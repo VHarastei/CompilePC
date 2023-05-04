@@ -3,6 +3,11 @@ import functions from '../common/firebaseFunctons';
 
 type Filter = Record<string, string | string[]>;
 
+type Response = {
+  result: Part[];
+  nextPage: number | null;
+};
+
 const Products = {
   get: async (
     id: string,
@@ -18,13 +23,17 @@ const Products = {
   list: async (
     collectionName: CollectionName,
     filter: Filter,
-  ): Promise<Part[]> => {
+    pageParam: number,
+    pageSize: number,
+  ): Promise<Response> => {
     const getProducts = functions.httpsCallable('getProducts');
-    const { data: products }: { data: Part[] } = await getProducts({
+    const { data: result }: { data: Response } = await getProducts({
       collectionName,
       filter,
+      pageParam,
+      pageSize,
     });
-    return products;
+    return result;
   },
 };
 

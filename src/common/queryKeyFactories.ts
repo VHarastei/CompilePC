@@ -4,7 +4,11 @@ const QUERY_KEY_FACTORIES = {
   PRODUCTS: {
     all: () => ['products'],
     list: (category: CategoryName, filter: SelectedFilter) => [
-      { ...QUERY_KEY_FACTORIES.PRODUCTS.all(), category, filter },
+      {
+        ...QUERY_KEY_FACTORIES.PRODUCTS.all(),
+        category,
+        filter,
+      },
     ],
     get: (id: string, category: CategoryName) => [
       { ...QUERY_KEY_FACTORIES.PRODUCTS.all(), id, category },

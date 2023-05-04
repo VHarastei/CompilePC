@@ -4,28 +4,40 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { Box } from '@mui/system';
 import ProductAccordion from './ProductAccordion';
 import BuilderProduct from './BuilderProduct';
-import { IconByCategory } from '../../../../common/constants';
-import { Builder } from '../../../../../types';
+import {
+  IconByCategory,
+  DEFAULT_PAGE_SIZE,
+} from '../../../../common/constants';
+import { Builder, Part } from '../../../../../types';
 import SkeletonProduct from './SkeletonProduct';
 import useProducts from '../../../../hooks/useProducts';
+import Pagination from '../../../Pagination';
 
 type BuilderProps = {
   builder: Builder;
 };
 
 const BuilderModule: React.FC<BuilderProps> = ({ builder }) => {
-  const { data: products, isLoading, isError } = useProducts(builder);
+  const {
+    data: products,
+    isLoading,
+    isError,
+    hasNextPage,
+    fetchNextPage,
+  } = useProducts({ builder, pageSize: DEFAULT_PAGE_SIZE });
 
   const BuilderProducts = () => (
     <>
-      {(isLoading ? Array.from(new Array(5)) : products || []).map(
-        (product, index) =>
-          product ? (
-            <BuilderProduct
-              product={product}
-              key={product.id}
-              category={builder.categoryName}
-            />
+      {(isLoading ? Array.from(new Array(5)) : products?.pages || []).map(
+        (group, index) =>
+          group ? (
+            group.result.map((product: Part) => (
+              <BuilderProduct
+                product={product}
+                key={product.id}
+                category={builder.categoryName}
+              />
+            ))
           ) : (
             // eslint-disable-next-line react/no-array-index-key
             <SkeletonProduct key={index} />
@@ -53,6 +65,9 @@ const BuilderModule: React.FC<BuilderProps> = ({ builder }) => {
         </Box>
       ) : (
         <BuilderProducts />
+      )}
+      {!isLoading && hasNextPage && (
+        <Pagination fetchNextPage={fetchNextPage} />
       )}
     </ProductAccordion>
   );

@@ -266,6 +266,7 @@ export const filters: CategoryFilterBatch = {
         title: 'Capacity',
         key: 'capacity',
         options: [
+          { value: '500 GB', key: '500 GB' },
           { value: '1 TB', key: '1000 GB' },
           { value: '2 TB', key: '2000 GB' },
           { value: '3 TB', key: '3000 GB' },
@@ -326,13 +327,6 @@ export const filters: CategoryFilterBatch = {
         options: [
           { value: 'M.2', key: 'M.2' },
           { value: '2.5"', key: '2.5"' },
-          { value: '256 GB', key: '256 GB' },
-          { value: '480 GB', key: '480 GB' },
-          { value: '500 GB', key: '500 GB' },
-          { value: '512 GB', key: '512 GB' },
-          { value: '1000 GB', key: '1000 GB' },
-          { value: '1024 GB', key: '1024 GB' },
-          { value: '2048 GB', key: '2048 GB' },
         ],
       },
     ],
@@ -401,7 +395,6 @@ export const filters: CategoryFilterBatch = {
           { value: 'Tecware', key: 'Tecware' },
           { value: 'Aerocool', key: 'Aerocool' },
           { value: 'Vinga', key: 'Vinga' },
-          { value: 'Vinga', key: 'Vinga' },
           { value: 'KRUX', key: 'KRUX' },
         ],
       },
@@ -424,7 +417,7 @@ export const filters: CategoryFilterBatch = {
         title: 'Brand',
         key: 'brand',
         options: [
-          { value: 'Arctic', key: 'Arctic' },
+          { value: 'Arctic', key: 'ARCTIC' },
           { value: 'ID-COOLING', key: 'ID-COOLING' },
           { value: 'be quiet!', key: 'be quiet!' },
           { value: 'Deepcool', key: 'Deepcool' },

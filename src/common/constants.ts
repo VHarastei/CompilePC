@@ -13,6 +13,8 @@ import {
 
 const DEFAULT_REGION = 'europe-central2';
 
+const DEFAULT_PAGE_SIZE = 10;
+
 const IconByCategory: {
   [key in keyof typeof ProductCategories]: FunctionComponent<
     SVGProps<SVGSVGElement>
@@ -99,4 +101,5 @@ export {
   MIN_PRICE_SLIDER_DISTANCE,
   NUMERIC_FORMAT,
   ROUTES,
+  DEFAULT_PAGE_SIZE,
 };
