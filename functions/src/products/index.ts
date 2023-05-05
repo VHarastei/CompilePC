@@ -2,9 +2,7 @@ import Joi from 'joi';
 import { getDB } from '../bootstrap';
 import { DEFAULT_REGION } from '../common/constants';
 import * as functions from 'firebase-functions';
-import naormalizeFilter from '../common/normalizeFilter';
-import normalizeAssembly from '../common/normalizeAssembly';
-import formatCPUFilter from '../utils/formatCPUFilter';
+import normalizeFilter from '../common/normalizeFilter';
 
 const getProductsSchema = Joi.object({
   minPrice: Joi.number(),
@@ -17,41 +15,18 @@ const getProductsSchema = Joi.object({
 const getProducts = functions
   .region(DEFAULT_REGION)
   .https.onCall(async (data) => {
-    const { collectionName, filter, pageParam, pageSize, assembly } = data;
+    const { collectionName, filter, pageParam, pageSize, compatibleFilters } =
+      data;
 
-    const assemblyComponents = normalizeAssembly(assembly);
-
-    switch (collectionName) {
-      case 'CPUs':
-        formatCPUFilter(assemblyComponents);
-        break;
-      case 'graphicsCards':
-        break;
-      case 'PSUs':
-        break;
-      case 'RAM':
-        break;
-      case 'solidStateDrives':
-        break;
-      case 'hardDrives':
-        break;
-      case 'motherboards':
-        break;
-      case 'cases':
-        break;
-      case 'coolings':
-        break;
-      default:
-        break;
-    }
+    console.log(compatibleFilters);
 
     await getProductsSchema.validateAsync(filter);
 
     const db = await getDB();
-    const normalizedFilter = naormalizeFilter(filter);
+    const normalizedFilter = normalizeFilter(filter);
     const cursor = db
       .collection(collectionName)
-      .find(normalizedFilter)
+      .find({ ...normalizedFilter })
       .limit(pageSize)
       .skip((pageParam - 1) * pageSize);
 

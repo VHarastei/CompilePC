@@ -58,9 +58,14 @@ export type CPU = Product & {
   TDP: string;
   PCIExpress: string;
   maxOperatingTemperature?: string;
-  maxDDR4Speed: string;
+  maxDDR3Speed?: string;
+  maxDDR4Speed?: string;
+  maxDDR5Speed?: string;
   channels?: string;
+  ramType?: string | string[];
 };
+
+export type Filter = Record<string, string | string[]>;
 
 // collection graphicsCards
 export type GraphicsCard = Product & {
@@ -90,6 +95,7 @@ export type GraphicsCard = Product & {
   minPSU: string;
   numberOfSlots: string;
   size: string; // e.g. 200x123x38
+  chipsetProp?: string;
 };
 
 export type MotherboardFormFactor =
@@ -138,6 +144,8 @@ export type Motherboard = Product & {
   mainPowerSocket?: string;
   CPUPowerSocket?: string;
   FanPowerConnectors?: string;
+  ramType?: string | string[];
+  interface?: string;
 };
 
 // collection RAM

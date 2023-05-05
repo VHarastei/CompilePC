@@ -1,6 +1,6 @@
 import { regexes } from './constants';
 
-const naormalizeFilter = (params: Record<string, string | string[]>) => {
+const normalizeFilter = (params: Record<string, string | string[]>) => {
   const generateRange = (prop: string) => {
     const array = prop.split('-');
     const range = Array.from(
@@ -55,4 +55,4 @@ const naormalizeFilter = (params: Record<string, string | string[]>) => {
   return filter;
 };
 
-export default naormalizeFilter;
+export default normalizeFilter;

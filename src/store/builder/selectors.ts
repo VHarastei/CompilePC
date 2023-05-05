@@ -26,6 +26,8 @@ const selectBuilder = (
 
 const selectAssembly = (state: RootState): Assembly => state.assembly;
 
+const selectCompatibleFilters = (state: RootState) => state.compatibleFilters;
+
 const selectAssemblyPart = (category: CategoryName): Selector<Part | null> =>
   createSelector(selectAssembly, (assembly: Assembly) => assembly[category]);
 
@@ -41,4 +43,5 @@ export {
   selectAssemblyPart,
   selectBuilder,
   selectFilter,
+  selectCompatibleFilters,
 };

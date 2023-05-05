@@ -20,7 +20,6 @@ type useProductProps = {
 const useProducts = ({
   builder,
   pageSize,
-  assembly,
 }: useProductProps): UseInfiniteQueryResult => {
   const { setAlert } = useContext(UIContext);
 
@@ -33,7 +32,7 @@ const useProducts = ({
   return useInfiniteQuery(
     QUERY_KEY_FACTORIES.PRODUCTS.list(categoryName, filter),
     ({ pageParam = 1 }) =>
-      Products.list(collectionName, filter, pageParam, pageSize, assembly),
+      Products.list(collectionName, filter, pageParam, pageSize, {}),
     {
       enabled: isEnabled,
       getNextPageParam: (lastPage) =>

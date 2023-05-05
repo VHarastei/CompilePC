@@ -5,6 +5,7 @@ import {
   Builder,
   CategoryName,
   SelectedFilter,
+  Filter,
 } from '../../../types/index';
 import { ProductCategories } from '../../common/constants';
 
@@ -12,6 +13,7 @@ export interface BuilderState {
   builders: Builder[];
   openedBuilder: CategoryName | null;
   assembly: Assembly;
+  compatibleFilters: Filter | null;
 }
 
 const builders: Builder[] = Object.values(ProductCategories).map(
@@ -37,6 +39,7 @@ const initialState: BuilderState = {
   builders,
   openedBuilder: null,
   assembly: emptyAssembly,
+  compatibleFilters: null,
 };
 
 export const builderSlice = createSlice({

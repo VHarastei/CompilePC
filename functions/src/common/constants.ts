@@ -31,3 +31,5 @@ export const regexes: Record<string, RegExp> = {
   fansInCase: /fans\(.*\)/i,
   liquidFansInCase: /liquidCooling\(.*\)/i,
 };
+
+export const ramTypes = ['DDR3', 'DDR4', 'DDR5'];

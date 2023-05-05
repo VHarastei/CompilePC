@@ -7,6 +7,7 @@ import camelize from '../common/camelize';
 import cleanComplexTable from '../common/cleanComplexTable';
 import { removeNonBreakingSpace } from '../common/removeNonBreakingSpace';
 import parsePrices from '../common/parsePrices';
+import { ramTypes } from '../common/constants';
 
 const parseCPUPage = async (
   productId: string,
@@ -14,13 +15,19 @@ const parseCPUPage = async (
 ): Promise<CPU | null> => {
   const name = await parseElementText('.op1-tt', page);
 
+  if (!name) return null;
+
   const brand = await parseElementText('.path_lnk_brand', page);
+
+  if (!brand) return null;
 
   const mainImageContainer = await getParsingElement('.img200', page);
   const mainImage = await page.evaluate(
     (el) => el.lastElementChild.getAttribute('src').split(' ')[0],
     mainImageContainer,
   );
+
+  if (!mainImage) return null;
 
   const descriptionText = await parseElementText('.conf-desc-ai-title', page);
 
@@ -44,7 +51,7 @@ const parseCPUPage = async (
     return getNodeTreeText(node);
   }, specsTable);
 
-  if (!name || !mainImage || !rawSpecsTable || !brand) return null;
+  if (!rawSpecsTable) return null;
 
   const cleanedSpecsTable = cleanComplexTable(rawSpecsTable);
 
@@ -58,6 +65,12 @@ const parseCPUPage = async (
 
     specs[camelName] = removeNonBreakingSpace(value);
   });
+
+  const RAMType = ramTypes.filter((ramType) =>
+    Object.keys(specs).join('').includes(ramType),
+  );
+
+  if (!RAMType.length) return null;
 
   const price = await parsePrices(page);
 
@@ -86,8 +99,11 @@ const parseCPUPage = async (
         TDP: specs?.TDP,
         PCIExpress: specs?.pCIExpress,
         maxOperatingTemperature: specs?.maxOperatingTemperature,
+        maxDDR3Speed: specs?.maxDDR3Speed,
         maxDDR4Speed: specs?.maxDDR4Speed,
+        maxDDR5Speed: specs?.maxDDR5Speed,
         channels: specs?.channels,
+        ramType: RAMType,
       }
     : null;
 };

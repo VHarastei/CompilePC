@@ -1,7 +1,5 @@
-import { Assembly, CollectionName, FullProduct, Part } from '../../types';
+import { CollectionName, Filter, FullProduct, Part } from '../../types';
 import functions from '../common/firebaseFunctons';
-
-type Filter = Record<string, string | string[]>;
 
 type Response = {
   result: Part[];
@@ -25,7 +23,7 @@ const Products = {
     filter: Filter,
     pageParam: number,
     pageSize: number,
-    assembly: Assembly,
+    compatibleFilters: Filter,
   ): Promise<Response> => {
     const getProducts = functions.httpsCallable('getProducts');
     const { data: result }: { data: Response } = await getProducts({
@@ -33,7 +31,7 @@ const Products = {
       filter,
       pageParam,
       pageSize,
-      assembly,
+      compatibleFilters,
     });
     return result;
   },
