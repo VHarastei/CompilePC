@@ -4,7 +4,7 @@ import {
 } from '@tanstack/react-query';
 import { useContext } from 'react';
 import { useSelector } from 'react-redux';
-import { Builder } from '../../types/index';
+import { Assembly, Builder } from '../../types/index';
 import { UIContext } from '../components/UIContext';
 import Products from '../api/products';
 import QUERY_KEY_FACTORIES from '../common/queryKeyFactories';
@@ -14,11 +14,13 @@ import { selectOpenedBuilder } from '../store/builder/selectors';
 type useProductProps = {
   builder: Builder;
   pageSize: number;
+  assembly: Assembly;
 };
 
 const useProducts = ({
   builder,
   pageSize,
+  assembly,
 }: useProductProps): UseInfiniteQueryResult => {
   const { setAlert } = useContext(UIContext);
 
@@ -31,15 +33,11 @@ const useProducts = ({
   return useInfiniteQuery(
     QUERY_KEY_FACTORIES.PRODUCTS.list(categoryName, filter),
     ({ pageParam = 1 }) =>
-      Products.list(collectionName, filter, pageParam, pageSize),
+      Products.list(collectionName, filter, pageParam, pageSize, assembly),
     {
       enabled: isEnabled,
-      getNextPageParam: (lastPage) => {
-        if (lastPage.nextPage) {
-          return lastPage.nextPage;
-        }
-        return false;
-      },
+      getNextPageParam: (lastPage) =>
+        lastPage.nextPage ? lastPage.nextPage : false,
       onError: () =>
         setAlert({
           show: true,

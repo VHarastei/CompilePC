@@ -8,17 +8,32 @@ import Button from '@mui/material/Button/Button';
 // eslint-disable-next-line @typescript-eslint/ban-types
 type PaginationProps = {
   fetchNextPage: () => void;
+  hasNextPage?: boolean;
+  isFetchingNextPage: boolean;
 };
 
-const Pagination: React.FC<PaginationProps> = ({ fetchNextPage }) => {
+const Pagination: React.FC<PaginationProps> = ({
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+}) => {
   const handleClick = () => {
     fetchNextPage();
   };
 
   return (
     <Box display="flex" justifyContent="center" padding="5px">
-      <Button onClick={handleClick} color="secondary" variant="contained">
-        Load More
+      <Button
+        disabled={!hasNextPage || isFetchingNextPage}
+        onClick={handleClick}
+        color="secondary"
+        variant="contained"
+      >
+        {!hasNextPage
+          ? 'Nothing more to load'
+          : isFetchingNextPage
+          ? 'Loading...'
+          : 'Load more'}
       </Button>
     </Box>
   );
