@@ -1,8 +1,8 @@
 import { PSU, ShortSpec } from '../../../../../../types/index';
 
 const PSUformer = (product: PSU): ShortSpec[] => [
-  { name: 'Power', value: product.power },
-  { name: 'Form Factor', value: product.formFactor },
+  { name: 'Power', value: `${product.power} W` },
+  { name: 'Form Factor', value: product.psuFormFactor },
   {
     name: 'Power supply',
     value: product.powerSupply,

@@ -22,7 +22,7 @@ const formRAMSpecs = (product: RAM): SpecBlock[] => [
       },
       {
         title: 'Type',
-        value: product.type,
+        value: product.ramType,
       },
       {
         title: 'Memory speed',

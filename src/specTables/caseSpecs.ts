@@ -14,11 +14,11 @@ const formCaseSpecs = (product: Case): SpecBlock[] => [
       },
       {
         title: 'Form factor',
-        value: product.formFactor,
+        value: product.caseFormFactor,
       },
       {
         title: 'Motherboard form factor',
-        value: product.motherboardFormFactor,
+        value: product.formFactor,
       },
       {
         title: 'Board placement',

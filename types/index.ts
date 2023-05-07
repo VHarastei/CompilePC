@@ -62,7 +62,7 @@ export type CPU = Product & {
   maxDDR4Speed?: string;
   maxDDR5Speed?: string;
   channels?: string;
-  ramType?: string | string[];
+  ramType: string | string[];
 };
 
 export type Filter = Record<string, string | string[]>;
@@ -285,20 +285,20 @@ export type Cooling = Product & {
 export type PSU = Product & {
   power: number;
   psuFormFactor: string;
-  PFC: string;
-  efficiency: string;
-  coolingSystem: string;
-  fanSize: string;
-  fanBearings: string;
-  certification: string;
-  atx12vVersion: string;
-  powerSupply: string;
+  PFC?: string;
+  efficiency?: string;
+  coolingSystem?: string;
+  fanSize?: string;
+  fanBearings?: string;
+  certification?: string;
+  atx12vVersion?: string;
+  powerSupply?: string;
   SATA?: string;
   MOLEX?: string;
-  PCIE8pin: string;
-  PCIE16pin: string;
-  cableSystem: string;
-  braidedWires: boolean;
+  PCIE8pin?: string;
+  PCIE16pin?: string;
+  cableSystem?: string;
+  braidedWires?: boolean;
   mbCableLength?: string;
   cpuCableLength?: string;
   sataCableLength?: string;
@@ -328,6 +328,10 @@ export type Part =
   | Cooling
   | PSU;
 
+export type FullProduct = Part & {
+  stores: Store[];
+};
+
 export type Spec = {
   title: string;
   value: string | boolean | number | undefined;
@@ -345,10 +349,6 @@ export type ProductCategory = {
 };
 
 export type ShortSpec = { name: string; value?: string };
-
-export type FullProduct = Product & {
-  stores: Store[];
-};
 
 export type Assembly = {
   CPU: CPU | null;

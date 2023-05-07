@@ -110,7 +110,7 @@ const formGPUSpecs = (product: GraphicsCard): SpecBlock[] => [
       },
       {
         title: 'Minimum PSU recommendation',
-        value: product.minPSU,
+        value: `${product.power} W`,
       },
       {
         title: 'Additional power',

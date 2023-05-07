@@ -5,10 +5,6 @@ const formHDDSpecs = (product: HardDrive): SpecBlock[] => [
     name: 'Main',
     specs: [
       {
-        title: 'Placement',
-        value: product.placement,
-      },
-      {
         title: 'Type',
         value: product.type,
       },
@@ -27,7 +23,7 @@ const formHDDSpecs = (product: HardDrive): SpecBlock[] => [
     specs: [
       {
         title: 'Interface',
-        value: product.interface,
+        value: product.driveInterface,
       },
     ],
   },
