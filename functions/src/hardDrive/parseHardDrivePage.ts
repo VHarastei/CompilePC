@@ -15,13 +15,19 @@ const parseHardDrivePage = async (
 ): Promise<HardDrive | null> => {
   const name = await parseElementText('.op1-tt', page);
 
+  if (!name) return null;
+
   const brand = await parseElementText('.path_lnk_brand', page);
+
+  if (!brand) return null;
 
   const mainImageContainer = await getParsingElement('.img200', page);
   const mainImage = await page.evaluate(
     (el) => el.lastElementChild.getAttribute('src').split(' ')[0],
     mainImageContainer,
   );
+
+  if (!mainImage) return null;
 
   const descriptionText = await parseElementText('.conf-desc-ai-title', page);
 
@@ -45,7 +51,7 @@ const parseHardDrivePage = async (
     return getNodeTreeText(node);
   }, specsTable);
 
-  if (!name || !mainImage || !rawSpecsTable || !brand) return null;
+  if (!rawSpecsTable) return null;
 
   const isTableSimple = !!(await page.$('.one-col'));
 
@@ -68,37 +74,39 @@ const parseHardDrivePage = async (
       : (specs[camelName] = removeNonBreakingSpace(value));
   });
 
-  console.log(specs);
+  if (specs?.placement === 'external') return null;
+
+  if (!specs?.interface) return null;
 
   const price = await parsePrices(page);
 
-  return price
-    ? {
-        id: productId,
-        name,
-        mainImage,
-        price,
-        brand,
-        description: description || undefined,
-        placement: specs.placement,
-        type: specs.type,
-        capacity: specs.size,
-        material: specs?.material,
-        plates: specs?.plates,
-        averageSearchTime: specs?.averageSearchTime,
-        interface: specs?.interface,
-        formFactor: specs.formFactor,
-        cacheMemory: specs.cacheMemory,
-        recordTechnology: specs.recordTechnology,
-        RPM: specs.RPM,
-        dataTransferRate: specs.dataTransferRate,
-        operationPowerConsumption: specs.operationPowerConsumption,
-        standbyPowerConsumption: specs.standbyPowerConsumption,
-        MTBF: specs.MTBF,
-        size: specs.sizeDimensions,
-        weight: specs.weight,
-      }
-    : null;
+  if (!price) return null;
+
+  return {
+    id: productId,
+    name,
+    mainImage,
+    price,
+    brand,
+    description: description || undefined,
+    // placement: specs.placement,
+    type: specs.type,
+    capacity: specs.size,
+    material: specs?.material,
+    plates: specs?.plates,
+    averageSearchTime: specs?.averageSearchTime,
+    driveInterface: specs?.interface,
+    formFactor: specs.formFactor,
+    cacheMemory: specs.cacheMemory,
+    recordTechnology: specs.recordTechnology,
+    RPM: specs.RPM,
+    dataTransferRate: specs.dataTransferRate,
+    operationPowerConsumption: specs.operationPowerConsumption,
+    standbyPowerConsumption: specs.standbyPowerConsumption,
+    MTBF: specs.MTBF,
+    size: specs.sizeDimensions,
+    weight: specs.weight,
+  };
 };
 
 export default parseHardDrivePage;

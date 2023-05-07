@@ -74,38 +74,38 @@ const parseCPUPage = async (
 
   const price = await parsePrices(page);
 
-  return price
-    ? {
-        id: productId,
-        name,
-        mainImage,
-        brand,
-        description: description || undefined,
-        price,
-        officialWebsite: specs?.officialWebsite,
-        manufacturer: specs?.manufacturer,
-        series: specs?.series,
-        codeName: specs?.codeName,
-        socket: specs?.socket,
-        lithography: specs?.lithography,
-        cores: specs?.cores,
-        threads: specs?.threads,
-        clockSpeed: specs?.clockSpeed,
-        turboBoost: specs?.turboBoostTurboCore,
-        l1Cache: specs?.totalL1Cache,
-        l2Cache: specs?.totalL2Cache,
-        l3Cache: specs?.totalL2Cache,
-        IGP: specs?.IGP,
-        TDP: specs?.TDP,
-        PCIExpress: specs?.pCIExpress,
-        maxOperatingTemperature: specs?.maxOperatingTemperature,
-        maxDDR3Speed: specs?.maxDDR3Speed,
-        maxDDR4Speed: specs?.maxDDR4Speed,
-        maxDDR5Speed: specs?.maxDDR5Speed,
-        channels: specs?.channels,
-        ramType: RAMType,
-      }
-    : null;
+  if (!price) return null;
+
+  return {
+    id: productId,
+    name,
+    mainImage,
+    brand,
+    description: description || undefined,
+    price,
+    officialWebsite: specs?.officialWebsite,
+    manufacturer: specs?.manufacturer,
+    series: specs?.series,
+    codeName: specs?.codeName,
+    socket: specs?.socket,
+    lithography: specs?.lithography,
+    cores: specs?.cores,
+    threads: specs?.threads,
+    clockSpeed: specs?.clockSpeed,
+    turboBoost: specs?.turboBoostTurboCore,
+    l1Cache: specs?.totalL1Cache,
+    l2Cache: specs?.totalL2Cache,
+    l3Cache: specs?.totalL2Cache,
+    IGP: specs?.IGP,
+    TDP: specs?.TDP,
+    PCIExpress: specs?.pCIExpress,
+    maxOperatingTemperature: specs?.maxOperatingTemperature,
+    maxDDR3Speed: specs?.maxDDR3Speed,
+    maxDDR4Speed: specs?.maxDDR4Speed,
+    maxDDR5Speed: specs?.maxDDR5Speed,
+    channels: specs?.channels,
+    ramType: RAMType,
+  };
 };
 
 export default parseCPUPage;

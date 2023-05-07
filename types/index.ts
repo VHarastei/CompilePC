@@ -92,10 +92,9 @@ export type GraphicsCard = Product & {
   cooling: string;
   fans: string;
   additionalPower: string;
-  minPSU: string;
+  power: number;
   numberOfSlots: string;
   size: string; // e.g. 200x123x38
-  chipsetProp?: string;
 };
 
 export type MotherboardFormFactor =
@@ -107,7 +106,7 @@ export type MotherboardFormFactor =
 
 // collection motherboards
 export type Motherboard = Product & {
-  socket?: string;
+  socket: string;
   formFactor?: MotherboardFormFactor;
   powerPhases?: string;
   VRMHeatsink?: boolean;
@@ -126,15 +125,15 @@ export type Motherboard = Product & {
   displayPortVersion?: string;
   audiochip?: string;
   sound?: string;
-  sata3?: string;
+  sata3: string;
   lanRJ45?: string;
   lanPorts?: string;
   lanController?: string;
-  m2connector?: string;
-  m2?: string;
+  m2connector: string;
+  m2: string;
   PCI_E_1x?: string;
   PCI_E_16x?: string;
-  PCIExpressVerison?: string;
+  PCIExpressVerison: string;
   ExternalUSB_2_0?: string;
   ExternalUSB_3_2_gen1?: string;
   ExternalUSB_3_2_gen2?: string;
@@ -144,8 +143,9 @@ export type Motherboard = Product & {
   mainPowerSocket?: string;
   CPUPowerSocket?: string;
   FanPowerConnectors?: string;
-  ramType?: string | string[];
-  interface?: string;
+  ramType: string;
+  interface: string;
+  driveInterfaces: string | string[];
 };
 
 // collection RAM
@@ -154,7 +154,7 @@ export type RAM = Product & {
   capacity: string;
   modules: string;
   formFactor: string;
-  type: string;
+  ramType: string;
   speed: string;
   clockSpeed: string;
   casLatency: string;
@@ -167,10 +167,10 @@ export type RAM = Product & {
 
 // collection hardDrives
 export type HardDrive = Product & {
-  placement: string;
+  // placement: string;
   type: string;
   capacity: string;
-  interface?: string;
+  driveInterface: string;
   formFactor: string;
   cacheMemory: string;
   recordTechnology: string;
@@ -191,8 +191,9 @@ export type SolidStateDrive = Product & {
   placement: string;
   capacity: string;
   formFactor: string;
-  m2Interface: string;
+  m2Interface?: string;
   interface?: string;
+  ssdInterface: string;
   controller: string;
   cacheMemory?: string;
   material?: string;
@@ -214,15 +215,15 @@ export type Case = Product & {
   colour: string | undefined;
   target: string;
   mount: string;
-  formFactor?: string;
-  motherboardFormFactor: string;
+  caseFormFactor?: string;
+  formFactor: string;
   psuFormFactor?: string;
   fanMaxHeight?: string;
   boardPlacement: string;
   psuMaxLength?: string;
   gpuMaxLength?: string;
   rubberFeet: boolean;
-  PSU: boolean;
+  PSU?: boolean;
   integratedPSUPower?: string;
   dimensions?: string;
   psuMount: string;
@@ -282,8 +283,8 @@ export type Cooling = Product & {
 
 // collection PSUs
 export type PSU = Product & {
-  power: string;
-  formFactor: string;
+  power: number;
+  psuFormFactor: string;
   PFC: string;
   efficiency: string;
   coolingSystem: string;

@@ -21,13 +21,19 @@ const parsePSUpage = async (
 
   const name = await parseElementText('.op1-tt', page);
 
+  if (!name) return null;
+
   const brand = await parseElementText('.path_lnk_brand', page);
+
+  if (!brand) return null;
 
   const mainImageContainer = await getParsingElement('.img200', page);
   const mainImage = await page.evaluate(
     (el) => el.lastElementChild.getAttribute('src').split(' ')[0],
     mainImageContainer,
   );
+
+  if (!mainImage) return null;
 
   const specsTable = await getParsingElement('#help_table', page);
 
@@ -44,7 +50,7 @@ const parsePSUpage = async (
     return getNodeTreeText(node);
   }, specsTable);
 
-  if (!name || !mainImage || !rawSpecsTable || !brand) return null;
+  if (!rawSpecsTable) return null;
 
   const isTableSimple = !!(await page.$('.one-col'));
 
@@ -65,44 +71,42 @@ const parsePSUpage = async (
     } else specs[camelName] = removeNonBreakingSpace(value);
   });
 
-  console.log(specs);
-
   const price = await parsePrices(page);
 
-  return price
-    ? {
-        id: productId,
-        name,
-        mainImage,
-        price,
-        brand,
-        description: description || undefined,
-        officialWebsite: specs?.officialWebsite,
-        power: specs?.power,
-        formFactor: specs?.formFactor,
-        PFC: specs?.PFC,
-        efficiency: specs?.efficiency,
-        coolingSystem: specs?.coolingSystem,
-        fanSize: specs?.fanSize,
-        fanBearings: specs?.fanBearing,
-        certification: specs?.certification,
-        atx12vVersion: specs?.aTX12VVersion,
-        powerSupply: specs?.mBCPUPowerSupply,
-        SATA: specs?.SATA,
-        MOLEX: specs?.MOLEX,
-        PCIE8pin: specs['pCIE8pin(6+2)'],
-        PCIE16pin: specs?.pCIE16pin,
-        cableSystem: specs?.cableSystem,
-        braidedWires: !specs?.braidedWires,
-        mbCableLength: specs?.MB,
-        cpuCableLength: specs?.CPU,
-        sataCableLength: specs?.SATACableLength,
-        molexCableLength: specs?.MOLEXCableLength,
-        PCIECableLength: specs?.['PCI-E'],
-        dimensions: specs?.['dimensions(HxWxD)'],
-        weight: specs?.weight,
-      }
-    : null;
+  if (!price) return null;
+
+  return {
+    id: productId,
+    name,
+    mainImage,
+    price,
+    brand,
+    description: description || undefined,
+    officialWebsite: specs?.officialWebsite,
+    power: parseInt(specs?.power),
+    psuFormFactor: specs?.formFactor,
+    PFC: specs?.PFC,
+    efficiency: specs?.efficiency,
+    coolingSystem: specs?.coolingSystem,
+    fanSize: specs?.fanSize,
+    fanBearings: specs?.fanBearing,
+    certification: specs?.certification,
+    atx12vVersion: specs?.aTX12VVersion,
+    powerSupply: specs?.mBCPUPowerSupply,
+    SATA: specs?.SATA,
+    MOLEX: specs?.MOLEX,
+    PCIE8pin: specs['pCIE8pin(6+2)'],
+    PCIE16pin: specs?.pCIE16pin,
+    cableSystem: specs?.cableSystem,
+    braidedWires: !specs?.braidedWires,
+    mbCableLength: specs?.MB,
+    cpuCableLength: specs?.CPU,
+    sataCableLength: specs?.SATACableLength,
+    molexCableLength: specs?.MOLEXCableLength,
+    PCIECableLength: specs?.['PCI-E'],
+    dimensions: specs?.['dimensions(HxWxD)'],
+    weight: specs?.weight,
+  };
 };
 
 export default parsePSUpage;

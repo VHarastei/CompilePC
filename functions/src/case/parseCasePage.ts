@@ -28,13 +28,19 @@ const parseCasePage = async (
 
   const name = await parseElementText('.op1-tt', page);
 
+  if (!name) return null;
+
   const brand = await parseElementText('.path_lnk_brand', page);
+
+  if (!brand) return null;
 
   const mainImageContainer = await getParsingElement('.img200', page);
   const mainImage = await page.evaluate(
     (el) => el.lastElementChild.getAttribute('src').split(' ')[0],
     mainImageContainer,
   );
+
+  if (!mainImage) return null;
 
   const specsTable = await getParsingElement('#help_table', page);
 
@@ -51,14 +57,14 @@ const parseCasePage = async (
     return getNodeTreeText(node);
   }, specsTable);
 
+  if (!rawSpecsTable) return null;
+
   const booleanValues = await page.evaluate(() => {
     const classNamePattern = /prop-/i;
     return [...document.querySelectorAll('img')]
       .filter((element) => classNamePattern.test(element.className))
       .map((element) => element.className === 'prop-y');
   });
-
-  if (!name || !mainImage || !rawSpecsTable || !brand) return null;
 
   const cleanedSpecsTable = cleanComplexTable(rawSpecsTable);
 
@@ -97,55 +103,53 @@ const parseCasePage = async (
 
   const price = await parsePrices(page);
 
-  console.log(specs);
+  if (specs?.PSU) return null;
 
-  return price
-    ? {
-        id: productId,
-        name,
-        mainImage,
-        brand,
-        description: description || undefined,
-        price,
-        officialWebsite: specs?.officialWebsite,
-        colour: specs?.colour,
-        target: specs?.features,
-        mount: specs?.mount,
-        fanMaxHeight: specs?.fanMaxHeight,
-        formFactor: specs?.formFactor,
-        motherboardFormFactor: specs?.motherboardSupport,
-        psuFormFactor: specs?.pSUFormFactor,
-        boardPlacement: specs?.boardPlacement,
-        psuMaxLength: specs?.pSUMaxLength,
-        gpuMaxLength: specs?.graphicsCardMaxLenght,
-        rubberFeet: specs?.rubberFeet,
-        PSU: specs?.PSU,
-        integratedPSUPower: specs?.integratedPSUPower,
-        psuMount: specs?.pSUMount,
-        dimensions: specs?.['dimensions(HxWxD)'],
-        expansionSlots: specs?.expansionSlots,
-        openMechanism: specs?.openMechanism,
-        fansTotal: specs?.fansTotal,
-        fansInfo: fansSizes,
-        fansMountTotal: specs?.fanMountsTotal,
-        gridFrontPanel: specs?.gridFrontPanel,
-        dustFilter: specs?.dustFilter,
-        liquidCoolingSupport: specs?.liquidCoolingSupport,
-        liquidPlacement: specs?.placement,
-        liquidCoolingMountsTotal: specs?.liquidCoolingMounts,
-        liquidCoolingInfo: liquidFansSizes,
-        usb32Gen1: specs?.uSB32Gen1,
-        usb32Gen2: specs?.uSB32Gen2,
-        usbc32Gen2: specs?.uSBC32Gen2,
-        usb20: specs?.['USB 2.0'],
-        audioPort: specs['audio(Microphoneheadphones)'],
-        material: specs?.material,
-        bays35: specs?.['35"Bays'],
-        internal25Compartments: specs?.['internal25"Compartments'],
-        frontPanel: specs?.frontPanel,
-        weight: specs?.weight,
-      }
-    : null;
+  if (!price) return null;
+
+  return {
+    id: productId,
+    name,
+    mainImage,
+    brand,
+    description: description || undefined,
+    price,
+    officialWebsite: specs?.officialWebsite,
+    colour: specs?.colour,
+    target: specs?.features,
+    mount: specs?.mount,
+    fanMaxHeight: specs?.fanMaxHeight,
+    caseFormFactor: specs?.formFactor,
+    formFactor: specs?.motherboardSupport,
+    psuFormFactor: specs?.pSUFormFactor.split(' ')[0],
+    boardPlacement: specs?.boardPlacement,
+    psuMaxLength: specs?.pSUMaxLength,
+    gpuMaxLength: specs?.graphicsCardMaxLenght,
+    rubberFeet: specs?.rubberFeet,
+    psuMount: specs?.pSUMount,
+    dimensions: specs?.['dimensions(HxWxD)'],
+    expansionSlots: specs?.expansionSlots,
+    openMechanism: specs?.openMechanism,
+    fansTotal: specs?.fansTotal,
+    fansInfo: fansSizes,
+    fansMountTotal: specs?.fanMountsTotal,
+    gridFrontPanel: specs?.gridFrontPanel,
+    dustFilter: specs?.dustFilter,
+    liquidCoolingSupport: specs?.liquidCoolingSupport,
+    liquidPlacement: specs?.placement,
+    liquidCoolingMountsTotal: specs?.liquidCoolingMounts,
+    liquidCoolingInfo: liquidFansSizes,
+    usb32Gen1: specs?.uSB32Gen1,
+    usb32Gen2: specs?.uSB32Gen2,
+    usbc32Gen2: specs?.uSBC32Gen2,
+    usb20: specs?.['USB 2.0'],
+    audioPort: specs['audio(Microphoneheadphones)'],
+    material: specs?.material,
+    bays35: specs?.['35"Bays'],
+    internal25Compartments: specs?.['internal25"Compartments'],
+    frontPanel: specs?.frontPanel,
+    weight: specs?.weight,
+  };
 };
 
 export default parseCasePage;

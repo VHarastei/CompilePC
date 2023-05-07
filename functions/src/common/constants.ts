@@ -13,6 +13,8 @@ export const parserByCategoryId: Record<string, CallableFunction> = {
   186: parseCPUPage,
 };
 
+export const ssdRegex = /PCI-E.*?4x|4x.*?PCI-E/;
+
 export const xPathSelectors: Record<string, string> = {
   specificationButton:
     "//div[@class='desc-menu']/a[contains(., 'Specifications')]",
