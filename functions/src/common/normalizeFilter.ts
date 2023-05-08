@@ -1,21 +1,26 @@
+import { CommonFilter } from '../../../src/utils/getCompatiblePropsValues';
 import { regexes } from './constants';
 
-const normalizeFilter = (params: Record<string, string | string[]>) => {
-  const generateRange = (prop: string) => {
-    const array = prop.split('-');
-    const range = Array.from(
-      { length: (Number(array[1]) - Number(array[0])) * 10 + 1 },
-      (_, i) => `${(i + Number(array[0]) * 10) / 10} ${array[2]}`,
-    );
-    return range;
-  };
+export const generateRange = (prop: string) => {
+  const array = prop.split('-');
+  const range = Array.from(
+    { length: (Number(array[1]) - Number(array[0])) * 10 + 1 },
+    (_, i) => `${(i + Number(array[0]) * 10) / 10} ${array[2]}`,
+  );
+  return range;
+};
 
-  const parseProp = (prop: string) => {
-    if (regexes.numericFormat.test(prop)) return prop;
-    if (prop.includes('-')) return generateRange(prop);
-    return [prop];
-  };
+export const parseProp = (prop: string) => {
+  if (regexes.numericFormat.test(prop)) return prop;
+  if (
+    (prop.includes('-') && prop.includes('maxPrice')) ||
+    prop.includes('minPrice')
+  )
+    return generateRange(prop);
+  return [prop];
+};
 
+const normalizeFilter = (params: CommonFilter) => {
   const normalizedParams = Object.fromEntries(
     Object.entries(params).filter(([_, value]) => value),
   );
@@ -25,7 +30,7 @@ const normalizeFilter = (params: Record<string, string | string[]>) => {
       key,
       Array.isArray(value)
         ? value.map((el) => parseProp(el)).flat()
-        : parseProp(value),
+        : parseProp(value as string),
     ]),
   );
 
@@ -40,9 +45,17 @@ const normalizeFilter = (params: Record<string, string | string[]>) => {
       .filter(([key]) => key !== 'maxPrice' && key !== 'minPrice'),
   );
 
+  const filteredPower = parsedFilters.power
+    ? Object.assign(properFilter, {
+        ['power']: {
+          $gte: Number(parsedFilters.power),
+        },
+      })
+    : properFilter;
+
   const filter =
     parsedFilters.maxPrice && parsedFilters.minPrice
-      ? Object.assign(properFilter, {
+      ? Object.assign(filteredPower, {
           ['price.range.maxPrice']: {
             $lte: Number(parsedFilters.maxPrice) || 50000,
           },
@@ -50,7 +63,7 @@ const normalizeFilter = (params: Record<string, string | string[]>) => {
             $gte: Number(parsedFilters.minPrice) || 0,
           },
         })
-      : properFilter;
+      : filteredPower;
 
   return filter;
 };

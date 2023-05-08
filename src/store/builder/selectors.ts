@@ -5,6 +5,7 @@ import {
   Builder,
   CategoryName,
   Part,
+  CompatibleFilter,
 } from '../../../types/index';
 import { RootState } from '../index';
 
@@ -26,7 +27,8 @@ const selectBuilder = (
 
 const selectAssembly = (state: RootState): Assembly => state.assembly;
 
-const selectCompatibleFilters = (state: RootState) => state.compatibleFilters;
+const selectCompatibleFilters = (state: RootState): CompatibleFilter =>
+  state.compatibleFilters;
 
 const selectAssemblyPart = (category: CategoryName): Selector<Part | null> =>
   createSelector(selectAssembly, (assembly: Assembly) => assembly[category]);

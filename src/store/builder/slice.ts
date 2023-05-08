@@ -5,15 +5,16 @@ import {
   Builder,
   CategoryName,
   SelectedFilter,
-  Filter,
+  CompatibleFilter,
 } from '../../../types/index';
 import { ProductCategories } from '../../common/constants';
+import getCompatibleFilterValues from '../../utils/getCompatibleFilterValues';
 
 export interface BuilderState {
   builders: Builder[];
   openedBuilder: CategoryName | null;
   assembly: Assembly;
-  compatibleFilters: Filter | null;
+  compatibleFilters: CompatibleFilter;
 }
 
 const builders: Builder[] = Object.values(ProductCategories).map(
@@ -23,7 +24,7 @@ const builders: Builder[] = Object.values(ProductCategories).map(
   }),
 );
 
-const emptyAssembly = {
+const emptyState = {
   CPU: null,
   GPU: null,
   PSU: null,
@@ -38,8 +39,8 @@ const emptyAssembly = {
 const initialState: BuilderState = {
   builders,
   openedBuilder: null,
-  assembly: emptyAssembly,
-  compatibleFilters: null,
+  assembly: emptyState,
+  compatibleFilters: emptyState,
 };
 
 export const builderSlice = createSlice({
@@ -70,17 +71,29 @@ export const builderSlice = createSlice({
         ...state.assembly,
         [action.payload.category]: action.payload.part,
       };
+
+      const filterValues = getCompatibleFilterValues(
+        action.payload.category,
+        action.payload.part,
+      );
+
+      state.compatibleFilters = {
+        ...state.compatibleFilters,
+        [action.payload.category]: { ...filterValues },
+      };
     },
     removeAssemblyPart: (state, action: PayloadAction<CategoryName>) => {
       state.assembly = {
         ...state.assembly,
         [action.payload]: null,
       };
+
+      delete state.compatibleFilters[action.payload];
     },
     eraseAssembly: (state) => {
-      state.assembly = emptyAssembly;
+      state.assembly = emptyState;
       state.openedBuilder = null;
-      state.compatibleFilters = null;
+      state.compatibleFilters = emptyState;
     },
   },
 });

@@ -4,8 +4,6 @@
 const cleanComplexTable = (rawSpecsTable: any) => {
   const cleanedSpecsTable = rawSpecsTable.split('\n');
 
-  // console.log(cleanedSpecsTable);
-
   let sockets = '';
 
   const normalizedSpecsTable = cleanedSpecsTable.filter((item: string) => {
@@ -36,8 +34,6 @@ const cleanComplexTable = (rawSpecsTable: any) => {
   const result = normalizedSpecsTable.map((item: string) =>
     item.includes('Socket') ? sockets : item,
   );
-
-  // console.log(result);
 
   return result;
 };

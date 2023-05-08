@@ -4,17 +4,19 @@ import {
 } from '@tanstack/react-query';
 import { useContext } from 'react';
 import { useSelector } from 'react-redux';
-import { Assembly, Builder } from '../../types/index';
+import { Builder } from '../../types/index';
 import { UIContext } from '../components/UIContext';
 import Products from '../api/products';
 import QUERY_KEY_FACTORIES from '../common/queryKeyFactories';
-import { selectOpenedBuilder } from '../store/builder/selectors';
+import {
+  selectCompatibleFilters,
+  selectOpenedBuilder,
+} from '../store/builder/selectors';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 type useProductProps = {
   builder: Builder;
   pageSize: number;
-  assembly: Assembly;
 };
 
 const useProducts = ({
@@ -25,6 +27,8 @@ const useProducts = ({
 
   const openedBuilder = useSelector(selectOpenedBuilder);
 
+  const compatibleFilter = useSelector(selectCompatibleFilters);
+
   const { categoryName, collectionName, filter } = builder;
 
   const isEnabled = openedBuilder === categoryName;
@@ -32,7 +36,13 @@ const useProducts = ({
   return useInfiniteQuery(
     QUERY_KEY_FACTORIES.PRODUCTS.list(categoryName, filter),
     ({ pageParam = 1 }) =>
-      Products.list(collectionName, filter, pageParam, pageSize, {}),
+      Products.list(
+        collectionName,
+        filter,
+        pageParam,
+        pageSize,
+        compatibleFilter,
+      ),
     {
       enabled: isEnabled,
       getNextPageParam: (lastPage) =>

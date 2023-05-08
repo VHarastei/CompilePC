@@ -107,7 +107,7 @@ export type MotherboardFormFactor =
 // collection motherboards
 export type Motherboard = Product & {
   socket: string;
-  formFactor?: MotherboardFormFactor;
+  formFactor: MotherboardFormFactor;
   powerPhases?: string;
   VRMHeatsink?: boolean;
   size?: string; // e.g. 226x211 mm
@@ -217,13 +217,12 @@ export type Case = Product & {
   mount: string;
   caseFormFactor?: string;
   formFactor: string;
-  psuFormFactor?: string;
+  psuFormFactor: string;
   fanMaxHeight?: string;
   boardPlacement: string;
   psuMaxLength?: string;
   gpuMaxLength?: string;
   rubberFeet: boolean;
-  PSU?: boolean;
   integratedPSUPower?: string;
   dimensions?: string;
   psuMount: string;
@@ -369,4 +368,19 @@ export type Builder = {
   builderTitle: BuilderCategory;
   collectionName: CollectionName;
   filter: SelectedFilter;
+};
+
+export type CompatibleFilter = {
+  CPU: Pick<CPU, 'socket' | 'ramType'> | null;
+  GPU: Pick<GraphicsCard, 'interface' | 'power'> | null;
+  PSU: Pick<PSU, 'power' | 'psuFormFactor'> | null;
+  RAM: Pick<RAM, 'ramType'> | null;
+  case: Pick<Case, 'formFactor' | 'psuFormFactor'> | null;
+  cooling: Pick<Cooling, 'socket'> | null;
+  motherboard: Pick<
+    Motherboard,
+    'socket' | 'formFactor' | 'driveInterfaces' | 'ramType' | 'interface'
+  > | null;
+  SSD: Pick<SolidStateDrive, 'ssdInterface'> | null;
+  HDD: Pick<HardDrive, 'driveInterface'> | null;
 };

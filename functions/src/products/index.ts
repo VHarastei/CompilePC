@@ -3,6 +3,7 @@ import { getDB } from '../bootstrap';
 import { DEFAULT_REGION } from '../common/constants';
 import * as functions from 'firebase-functions';
 import normalizeFilter from '../common/normalizeFilter';
+import getCompatiblePropsValues from '../../../src/utils/getCompatiblePropsValues';
 
 const getProductsSchema = Joi.object({
   minPrice: Joi.number(),
@@ -18,7 +19,12 @@ const getProducts = functions
     const { collectionName, filter, pageParam, pageSize, compatibleFilters } =
       data;
 
-    console.log(compatibleFilters);
+    const compatiblePropsValues = getCompatiblePropsValues(
+      collectionName,
+      compatibleFilters,
+    );
+
+    const normalizedCompatibleFilers = normalizeFilter(compatiblePropsValues);
 
     await getProductsSchema.validateAsync(filter);
 
@@ -26,7 +32,7 @@ const getProducts = functions
     const normalizedFilter = normalizeFilter(filter);
     const cursor = db
       .collection(collectionName)
-      .find({ ...normalizedFilter })
+      .find({ ...normalizedFilter, ...normalizedCompatibleFilers })
       .limit(pageSize)
       .skip((pageParam - 1) * pageSize);
 

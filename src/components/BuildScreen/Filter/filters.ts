@@ -151,43 +151,6 @@ export const filters: CategoryFilterBatch = {
           { value: 'MSI', key: 'MSI' },
         ],
       },
-      {
-        title: 'Socket',
-        key: 'socket',
-        options: [
-          { value: 'Intel LGA 1200', key: 'Intel LGA 1200' },
-          { value: 'Intel LGA 1700', key: 'Intel LGA 1700' },
-          { value: 'Intel LGA 1151 v2', key: 'Intel LGA 1151 v2' },
-          { value: 'AMD AM4', key: 'AMD AM4' },
-        ],
-      },
-      {
-        title: 'Form factor',
-        key: 'formFactor',
-        options: [
-          { value: 'mini-ITX', key: 'mini-ITX' },
-          { value: 'micro-ATX', key: 'micro-ATX' },
-          { value: 'ATX', key: 'ATX' },
-        ],
-      },
-      {
-        title: 'Memory slots (DDR4)',
-        key: 'DDR4',
-        options: [
-          { value: '1 slot', key: '1 slot(s)' },
-          { value: '2 slots', key: '2 slot(s)' },
-          { value: '4 slots', key: '4 slot(s)' },
-        ],
-      },
-      {
-        title: 'Memory slots (DDR3)',
-        key: 'DDR3',
-        options: [
-          { value: '1 slot', key: '1 slot(s)' },
-          { value: '2 slots', key: '2 slot(s)' },
-          { value: '4 slots', key: '4 slot(s)' },
-        ],
-      },
     ],
   },
   RAM: {
@@ -347,28 +310,6 @@ export const filters: CategoryFilterBatch = {
           { value: 'be quiet!', key: 'be quiet!' },
           { value: 'cooler-master', key: 'COOLER-MASTER' },
           { value: 'Corsair', key: 'Corsair' },
-        ],
-      },
-      {
-        title: 'Power',
-        key: 'power',
-        options: [
-          { value: '500 W', key: '500 W' },
-          { value: '600 W', key: '600 W' },
-          { value: '650 W', key: '650 W' },
-          { value: '700 W', key: '700 W' },
-          { value: '750 W', key: '750 W' },
-          { value: '850 W', key: '850 W' },
-          { value: '1000 W', key: '1000 W' },
-        ],
-      },
-      {
-        title: 'Form factor',
-        key: 'formFactor',
-        options: [
-          { value: 'mini-ITX', key: 'mini-ITX' },
-          { value: 'micro-ATX', key: 'micro-ATX' },
-          { value: 'ATX', key: 'ATX' },
         ],
       },
       {

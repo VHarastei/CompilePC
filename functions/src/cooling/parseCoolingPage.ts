@@ -28,13 +28,10 @@ const parseCoolingPage = async (
   const name = await parseElementText('.op1-tt', page);
 
   if (!name) return null;
-  // console.log(name);
 
   const brand = await parseElementText('.path_lnk_brand', page);
 
   if (!brand) return null;
-
-  // console.log(brand);
 
   const mainImageContainer = await getParsingElement('.img200', page);
 
@@ -44,7 +41,6 @@ const parseCoolingPage = async (
   );
 
   if (!mainImage) return null;
-  // console.log(mainImage);
 
   const specsTable = await getParsingElement('#help_table', page);
 
@@ -61,13 +57,9 @@ const parseCoolingPage = async (
     return getNodeTreeText(node);
   }, specsTable);
 
-  // console.log(rawSpecsTable);
-
   if (!rawSpecsTable) return null;
 
   const cleanedSpecsTable = cleanComplexTable(rawSpecsTable);
-
-  // console.log(cleanedSpecsTable);
 
   const specs: Record<string, string> = {};
 

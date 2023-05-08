@@ -66,7 +66,6 @@ const formCaseSpecs = (product: Case): SpecBlock[] => [
   {
     name: 'Storage',
     specs: [
-      { title: 'PSU', value: product.PSU },
       { title: 'PSU Mount', value: product.psuMount },
       { title: '3.5" bays', value: product.bays35 },
       {

@@ -2,7 +2,6 @@ import React from 'react';
 import { Typography } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { Box } from '@mui/system';
-import { useSelector } from 'react-redux';
 import ProductAccordion from './ProductAccordion';
 import BuilderProduct from './BuilderProduct';
 import {
@@ -13,15 +12,12 @@ import { Builder, Part } from '../../../../../types';
 import SkeletonProduct from './SkeletonProduct';
 import useProducts from '../../../../hooks/useProducts';
 import Pagination from '../../../Pagination';
-import { selectAssembly } from '../../../../store/builder/selectors';
 
 type BuilderProps = {
   builder: Builder;
 };
 
 const BuilderModule: React.FC<BuilderProps> = ({ builder }) => {
-  const assembly = useSelector(selectAssembly);
-
   const {
     data: products,
     isLoading,
@@ -29,7 +25,7 @@ const BuilderModule: React.FC<BuilderProps> = ({ builder }) => {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useProducts({ builder, pageSize: DEFAULT_PAGE_SIZE, assembly });
+  } = useProducts({ builder, pageSize: DEFAULT_PAGE_SIZE });
 
   const BuilderProducts = () => (
     <>
