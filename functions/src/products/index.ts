@@ -24,15 +24,14 @@ const getProducts = functions
       compatibleFilters,
     );
 
-    const normalizedCompatibleFilers = normalizeFilter(compatiblePropsValues);
-
     await getProductsSchema.validateAsync(filter);
 
     const db = await getDB();
+    const normalizedCompatibleFilters = normalizeFilter(compatiblePropsValues);
     const normalizedFilter = normalizeFilter(filter);
     const cursor = db
       .collection(collectionName)
-      .find({ ...normalizedFilter, ...normalizedCompatibleFilers })
+      .find({ ...normalizedFilter, ...normalizedCompatibleFilters })
       .limit(pageSize)
       .skip((pageParam - 1) * pageSize);
 

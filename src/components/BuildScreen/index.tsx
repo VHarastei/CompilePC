@@ -4,6 +4,7 @@ import useStyles from './styles';
 import Filter from './Filter';
 import Assembly from './Assembly';
 import BuildersList from './BuildersList';
+import ScrollButton from '../ScrollButton';
 
 const BuildScreen: React.FC = () => {
   const styles = useStyles();
@@ -13,6 +14,7 @@ const BuildScreen: React.FC = () => {
       <Filter />
       <BuildersList />
       <Assembly />
+      <ScrollButton />
     </Box>
   );
 };
