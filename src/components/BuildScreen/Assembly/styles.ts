@@ -19,11 +19,13 @@ const useStyles = makeStyles((theme: Theme) =>
     emptyTitle: {
       fontSize: `${30}px !important`,
       textAlign: 'center',
+      paddingTop: theme.spacing(2),
     },
     totalTitle: {
       fontWeight: 'bold !important',
       fontSize: `${30}px !important`,
       marginRight: `${theme.spacing(2)} !important`,
+      paddingLeft: theme.spacing(3),
     },
     totalSum: {
       fontSize: `${30}px !important`,

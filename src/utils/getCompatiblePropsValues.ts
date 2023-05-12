@@ -14,13 +14,16 @@ const getCompatiblePropsValues = (
     case 'CPUs':
       if (compatibleFilters.motherboard) {
         filter = { ...filter, socket: compatibleFilters.motherboard.socket };
-      } else if (compatibleFilters.cooling) {
+      }
+      if (compatibleFilters.cooling) {
         filter = { ...filter, socket: compatibleFilters.cooling.socket };
       }
 
       if (compatibleFilters.motherboard) {
         filter = { ...filter, ramType: compatibleFilters.motherboard.ramType };
-      } else if (compatibleFilters.RAM) {
+      }
+
+      if (compatibleFilters.RAM) {
         filter = { ...filter, ramType: compatibleFilters.RAM.ramType };
       }
       return filter;
@@ -28,26 +31,32 @@ const getCompatiblePropsValues = (
     case 'coolings':
       if (compatibleFilters.motherboard) {
         filter.socket = compatibleFilters.motherboard.socket;
-      } else if (compatibleFilters.CPU) {
+      }
+
+      if (compatibleFilters.CPU) {
         filter.socket = compatibleFilters.CPU.socket;
       }
       return filter;
 
     case 'motherboards':
       if (compatibleFilters.CPU) {
-        filter = { ...filter, socket: compatibleFilters.CPU.socket };
-      } else if (compatibleFilters.cooling) {
+        filter = {
+          ...filter,
+          socket: compatibleFilters.CPU.socket,
+          ramType: compatibleFilters.CPU.ramType,
+        };
+      }
+
+      if (compatibleFilters.cooling) {
         filter = { ...filter, socket: compatibleFilters.cooling.socket };
+      }
+
+      if (compatibleFilters.RAM) {
+        filter = { ...filter, ramType: compatibleFilters.RAM.ramType };
       }
 
       if (compatibleFilters.GPU) {
         filter = { ...filter, interface: compatibleFilters.GPU.interface };
-      }
-
-      if (compatibleFilters.CPU) {
-        filter = { ...filter, ramType: compatibleFilters.CPU.ramType };
-      } else if (compatibleFilters.RAM) {
-        filter = { ...filter, ramType: compatibleFilters.RAM.ramType };
       }
 
       if (compatibleFilters.case) {

@@ -1,44 +1,38 @@
-import { Button, Box } from '@mui/material';
-import React, { useState } from 'react';
+import { Fab, Zoom, Box } from '@mui/material';
+import React, { useCallback } from 'react';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
 import useStyles from './styles';
 
 const ScrollButton = () => {
   const styles = useStyles();
-  const [visible, setVisible] = useState(false);
 
-  const toggleVisible = () => {
-    const scrolled = document.documentElement.scrollTop;
-    if (scrolled > 300) {
-      setVisible(true);
-    } else if (scrolled <= 300) {
-      setVisible(false);
-    }
-  };
+  const trigger = useScrollTrigger({
+    target: window,
+    disableHysteresis: true,
+    threshold: 100,
+  });
 
-  const scrollToTop = () => {
+  const scrollToTop = useCallback(() => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     });
-  };
-
-  window.addEventListener('scroll', toggleVisible);
+  }, []);
 
   return (
-    <Box
-      className={styles.scrollButtonContainer}
-      sx={{ display: visible ? 'inline' : 'none' }}
-    >
-      <Button
-        onClick={scrollToTop}
-        color="primary"
-        variant="contained"
-        size="small"
-      >
-        <ArrowUpwardIcon />
-      </Button>
-    </Box>
+    <Zoom in={trigger}>
+      <Box role="presentation" className={styles.scrollButtonContainer}>
+        <Fab
+          onClick={scrollToTop}
+          color="primary"
+          size="small"
+          aria-label="scroll back to top"
+        >
+          <ArrowUpwardIcon />
+        </Fab>
+      </Box>
+    </Zoom>
   );
 };
 

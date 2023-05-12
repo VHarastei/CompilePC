@@ -93,6 +93,31 @@ const NUMERIC_FORMAT = /^[0-9]*$/;
 
 const MIN_PRICE_SLIDER_DISTANCE = 1000;
 // eslint-disable-next-line import/prefer-default-export
+
+const emptyState = {
+  CPU: null,
+  GPU: null,
+  PSU: null,
+  RAM: null,
+  case: null,
+  cooling: null,
+  motherboard: null,
+  SSD: null,
+  HDD: null,
+};
+
+const emptyComparisonState = {
+  CPU: [],
+  GPU: [],
+  PSU: [],
+  RAM: [],
+  case: [],
+  cooling: [],
+  motherboard: [],
+  SSD: [],
+  HDD: [],
+};
+
 export {
   DEFAULT_REGION,
   IconByCategory,
@@ -102,4 +127,6 @@ export {
   NUMERIC_FORMAT,
   ROUTES,
   DEFAULT_PAGE_SIZE,
+  emptyState,
+  emptyComparisonState,
 };

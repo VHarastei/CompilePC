@@ -6,6 +6,7 @@ import {
   CategoryName,
   Part,
   CompatibleFilter,
+  Comparison,
 } from '../../../types/index';
 import { RootState } from '../index';
 
@@ -27,6 +28,14 @@ const selectBuilder = (
 
 const selectAssembly = (state: RootState): Assembly => state.assembly;
 
+const selectComparison = (state: RootState): Comparison => state.comparison;
+
+const selectComparisonParts = (category: CategoryName): Selector<Part[]> =>
+  createSelector(
+    selectComparison,
+    (comparison: Comparison) => comparison[category],
+  );
+
 const selectCompatibleFilters = (state: RootState): CompatibleFilter =>
   state.compatibleFilters;
 
@@ -46,4 +55,5 @@ export {
   selectBuilder,
   selectFilter,
   selectCompatibleFilters,
+  selectComparisonParts,
 };

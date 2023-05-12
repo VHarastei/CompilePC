@@ -3,10 +3,11 @@ import { Theme } from '@mui/system';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    scrollButtonContainer: {
-      position: 'fixed',
-      bottom: theme.spacing(4.5),
-      right: theme.spacing(42),
+    checkboxContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      paddingLeft: theme.spacing(2),
+      paddingBottom: theme.spacing(1),
     },
   }),
 );

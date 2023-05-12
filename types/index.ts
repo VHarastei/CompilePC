@@ -370,6 +370,18 @@ export type Builder = {
   filter: SelectedFilter;
 };
 
+export type Comparison = {
+  CPU: CPU[];
+  GPU: GraphicsCard[];
+  PSU: PSU[];
+  RAM: RAM[];
+  case: Case[];
+  cooling: Cooling[];
+  motherboard: Motherboard[];
+  SSD: SolidStateDrive[];
+  HDD: HardDrive[];
+};
+
 export type CompatibleFilter = {
   CPU: Pick<CPU, 'socket' | 'ramType'> | null;
   GPU: Pick<GraphicsCard, 'interface' | 'power'> | null;

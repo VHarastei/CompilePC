@@ -12,6 +12,7 @@ import { Builder, Part } from '../../../../../types';
 import SkeletonProduct from './SkeletonProduct';
 import useProducts from '../../../../hooks/useProducts';
 import Pagination from '../../../Pagination';
+import ScrollButton from '../../../ScrollButton';
 
 type BuilderProps = {
   builder: Builder;
@@ -74,6 +75,7 @@ const BuilderModule: React.FC<BuilderProps> = ({ builder }) => {
           fetchNextPage={fetchNextPage}
         />
       )}
+      <ScrollButton />
     </ProductAccordion>
   );
 };

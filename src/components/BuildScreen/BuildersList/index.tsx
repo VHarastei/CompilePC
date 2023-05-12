@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { selectBuilders } from '../../../store/builder/selectors';
 import BuilderModule from './BuilderModule';
 import useStyles from './styles';
+import ComparisonDrawer from '../../ComparisonScreen/ComparisonDrawer';
 
 const BuildersList = () => {
   const styles = useStyles();
@@ -31,6 +32,7 @@ const BuildersList = () => {
           Main Parts
         </Typography>
         <MainBuilder />
+        <ComparisonDrawer />
       </Box>
     </Box>
   );

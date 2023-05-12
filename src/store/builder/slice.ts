@@ -6,8 +6,13 @@ import {
   CategoryName,
   SelectedFilter,
   CompatibleFilter,
+  Comparison,
 } from '../../../types/index';
-import { ProductCategories } from '../../common/constants';
+import {
+  emptyComparisonState,
+  emptyState,
+  ProductCategories,
+} from '../../common/constants';
 import getCompatibleFilterValues from '../../utils/getCompatibleFilterValues';
 
 export interface BuilderState {
@@ -15,6 +20,7 @@ export interface BuilderState {
   openedBuilder: CategoryName | null;
   assembly: Assembly;
   compatibleFilters: CompatibleFilter;
+  comparison: Comparison;
 }
 
 const builders: Builder[] = Object.values(ProductCategories).map(
@@ -24,23 +30,12 @@ const builders: Builder[] = Object.values(ProductCategories).map(
   }),
 );
 
-const emptyState = {
-  CPU: null,
-  GPU: null,
-  PSU: null,
-  RAM: null,
-  case: null,
-  cooling: null,
-  motherboard: null,
-  SSD: null,
-  HDD: null,
-};
-
 const initialState: BuilderState = {
   builders,
   openedBuilder: null,
   assembly: emptyState,
   compatibleFilters: emptyState,
+  comparison: emptyComparisonState,
 };
 
 export const builderSlice = createSlice({
@@ -95,6 +90,33 @@ export const builderSlice = createSlice({
       state.openedBuilder = null;
       state.compatibleFilters = emptyState;
     },
+    addComparisonItem: (
+      state,
+      action: PayloadAction<{ part: Part; category: CategoryName }>,
+    ) => {
+      state.comparison = {
+        ...state.comparison,
+        [action.payload.category]: [
+          ...state.comparison[action.payload.category],
+          action.payload.part,
+        ],
+      };
+    },
+    removeComparisonItem: (
+      state,
+      action: PayloadAction<{ part: Part; category: CategoryName }>,
+    ) => {
+      const { category, part } = action.payload;
+      const parts: Part[] = state.comparison[category];
+      state.comparison = {
+        ...state.comparison,
+        [category]: [
+          ...(parts.filter(
+            (product: Part) => product.id !== part.id,
+          ) as typeof parts),
+        ],
+      };
+    },
   },
 });
 
@@ -104,6 +126,8 @@ export const {
   addAssemblyPart,
   removeAssemblyPart,
   eraseAssembly,
+  addComparisonItem,
+  removeComparisonItem,
 } = builderSlice.actions;
 
 export default builderSlice.reducer;
