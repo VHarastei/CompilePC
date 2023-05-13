@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme: Theme) =>
     scrollButtonContainer: {
       position: 'fixed',
       bottom: theme.spacing(4.5),
-      right: theme.spacing(42),
+      right: theme.spacing(45),
     },
   }),
 );

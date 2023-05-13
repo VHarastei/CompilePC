@@ -11,25 +11,27 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     buttonStyles: {
       bottom: theme.spacing(5),
-      right: theme.spacing(5),
+      right: theme.spacing(8),
     },
     drawer: {
       zIndex: '1250 !important',
     },
-    paperStyles: {
+    container: {
+      display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      width: '100%',
-      flexDirection: 'row',
       gap: theme.spacing(5),
+      position: 'relative',
     },
     drawerPaper: {
       display: 'flex',
       flexDirection: 'row',
+      justifyContent: 'center',
       gap: theme.spacing(10),
       padding: theme.spacing(3),
-      minHeight: theme.spacing(60),
+      width: '100%',
       maxWidth: theme.spacing(250),
+      minHeight: theme.spacing(60),
       maxHeight: theme.spacing(80),
       backgroundColor: theme.palette.backgroundGrey,
       overflowY: 'auto',
@@ -44,6 +46,16 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     typo: {
       alignSelf: 'center',
+    },
+    buttonContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: theme.spacing(50),
+      position: 'absolute',
+      height: '100%',
+      bottom: 0,
+      right: 0,
     },
     fab: {
       '&.MuiFab-root': {

@@ -48,27 +48,30 @@ function ComparisonDrawer() {
         </Button>
       </Box>
       <Drawer
-        classes={{ paper: styles.paperStyles }}
         className={styles.drawer}
         anchor="bottom"
         open={isOpen}
         onClose={toggleDrawer}
         variant="persistent"
       >
-        <Box className={styles.drawerPaper}>
-          {openedBuilder ? (
-            ComparisonItems()
-          ) : (
-            <Typography className={styles.typo} variant="h5">
-              No category selected
-            </Typography>
-          )}
+        <Box className={styles.container}>
+          <Box className={styles.drawerPaper}>
+            {openedBuilder ? (
+              ComparisonItems()
+            ) : (
+              <Typography className={styles.typo} variant="h5">
+                No category selected
+              </Typography>
+            )}
+          </Box>
+          <Box className={styles.buttonContainer}>
+            {comparisonParts?.length > 1 && (
+              <Fab variant="extended" className={styles.fab}>
+                <CompareArrowsIcon fontSize="large" />
+              </Fab>
+            )}
+          </Box>
         </Box>
-        {comparisonParts?.length > 1 && (
-          <Fab variant="extended" className={styles.fab}>
-            <CompareArrowsIcon fontSize="large" />
-          </Fab>
-        )}
       </Drawer>
     </>
   );
