@@ -4,7 +4,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import useStyles from './styles';
 
-const ScrollButton = () => {
+const ScrollButton: React.FC = () => {
   const styles = useStyles();
 
   const trigger = useScrollTrigger({

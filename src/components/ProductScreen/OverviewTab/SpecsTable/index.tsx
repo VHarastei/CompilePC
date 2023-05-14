@@ -7,7 +7,7 @@ import useStyles from './styles';
 import TableBlock from './TableBlock';
 
 type SpecsTableProps = {
-  specs: SpecBlock[] | null;
+  specs: SpecBlock[];
   isLoading: boolean;
   isError: boolean;
 };
@@ -24,7 +24,7 @@ const SpecsTable: React.FC<SpecsTableProps> = ({
       <SkeletonBlock />
     ) : (
       <>
-        {(specs || []).map((specBlock) => (
+        {specs.map((specBlock) => (
           <TableBlock specBlock={specBlock} key={specBlock.name} />
         ))}
       </>

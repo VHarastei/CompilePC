@@ -2,6 +2,7 @@ import { Box, Button, Drawer, Fab, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import { useSelector } from 'react-redux';
+import { Link, generatePath } from 'react-router-dom';
 import useStyles from './styles';
 import {
   selectComparisonParts,
@@ -9,8 +10,9 @@ import {
 } from '../../../store/builder/selectors';
 import ComparisonItem from '../ComparisonItem';
 import { CategoryName } from '../../../../types';
+import { ROUTES } from '../../../common/constants';
 
-function ComparisonDrawer() {
+const ComparisonDrawer: React.FC = () => {
   const styles = useStyles();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -66,15 +68,20 @@ function ComparisonDrawer() {
           </Box>
           <Box className={styles.buttonContainer}>
             {comparisonParts?.length > 1 && (
-              <Fab variant="extended" className={styles.fab}>
-                <CompareArrowsIcon fontSize="large" />
-              </Fab>
+              <Link
+                style={{ textDecoration: 'none' }}
+                to={generatePath(ROUTES.COMPARISON)}
+              >
+                <Fab variant="extended" className={styles.fab}>
+                  <CompareArrowsIcon fontSize="large" />
+                </Fab>
+              </Link>
             )}
           </Box>
         </Box>
       </Drawer>
     </>
   );
-}
+};
 
 export default ComparisonDrawer;

@@ -87,6 +87,7 @@ const ProductPageTabs = [
 const ROUTES = {
   PRODUCT: '/product/:category/:id/',
   ASSEMBLY: '/assembly/:id',
+  COMPARISON: '/comparison',
 };
 
 const NUMERIC_FORMAT = /^[0-9]*$/;

@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable default-case */
 import {
   SpecBlock,
   GraphicsCard,
@@ -22,11 +24,7 @@ import formPSUSpecs from './psuSpecs';
 import formRAMSpecs from './ramSpecs';
 import formSSDSpecs from './ssdSpecs';
 
-const getSpecsTable = (
-  product: Part | undefined,
-  category: CategoryName,
-): SpecBlock[] | null => {
-  if (!product) return null;
+const getSpecsTable = (product: Part, category: CategoryName): SpecBlock[] => {
   switch (category) {
     case 'CPU':
       return formCPUSpecs(product as CPU);
@@ -46,8 +44,6 @@ const getSpecsTable = (
       return formCaseSpecs(product as Case);
     case 'cooling':
       return formCoolingSpecs(product as Cooling);
-    default:
-      return null;
   }
 };
 

@@ -18,7 +18,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
   isLoading,
   isError,
 }) => {
-  const productSpecs = getSpecsTable(product, categoryName);
+  const productSpecs = product && getSpecsTable(product, categoryName);
 
   const description = isError
     ? "Couldn't load product description"
@@ -27,11 +27,13 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
   return (
     <Box>
       <DescriptionBlock description={description} isLoading={isLoading} />
-      <SpecsTable
-        specs={productSpecs}
-        isLoading={isLoading}
-        isError={isError}
-      />
+      {productSpecs && (
+        <SpecsTable
+          specs={productSpecs}
+          isLoading={isLoading}
+          isError={isError}
+        />
+      )}
     </Box>
   );
 };

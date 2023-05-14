@@ -396,3 +396,8 @@ export type CompatibleFilter = {
   SSD: Pick<SolidStateDrive, 'ssdInterface'> | null;
   HDD: Pick<HardDrive, 'driveInterface'> | null;
 };
+
+export type CategorySpec = {
+  title: string;
+  values: (string | boolean | null | number)[];
+};
