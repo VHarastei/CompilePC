@@ -13,17 +13,27 @@ const parsePSUpage = async (
   productId: string,
   page: Page,
 ): Promise<PSU | null> => {
-  const description = await parseElementInnerHTML('.conf-desc-ai-title', page);
+  const descriptionText = await parseElementText('.conf-desc-ai-title', page);
+
+  const description =
+    descriptionText &&
+    (await parseElementInnerHTML('.conf-desc-ai-title', page));
 
   const name = await parseElementText('.op1-tt', page);
 
+  if (!name) return null;
+
   const brand = await parseElementText('.path_lnk_brand', page);
+
+  if (!brand) return null;
 
   const mainImageContainer = await getParsingElement('.img200', page);
   const mainImage = await page.evaluate(
-    (el) => el.lastElementChild.getAttribute('srcset').split(' ')[0],
+    (el) => el.lastElementChild.getAttribute('src').split(' ')[0],
     mainImageContainer,
   );
+
+  if (!mainImage) return null;
 
   const specsTable = await getParsingElement('#help_table', page);
 
@@ -40,7 +50,7 @@ const parsePSUpage = async (
     return getNodeTreeText(node);
   }, specsTable);
 
-  if (!name || !mainImage || !rawSpecsTable || !brand) return null;
+  if (!rawSpecsTable) return null;
 
   const isTableSimple = !!(await page.$('.one-col'));
 
@@ -56,10 +66,14 @@ const parsePSUpage = async (
 
     const camelName = camelize(name);
 
-    specs[camelName] = removeNonBreakingSpace(value);
+    if (specs.hasOwnProperty(camelName)) {
+      specs[`${camelName}CableLength`] = removeNonBreakingSpace(value);
+    } else specs[camelName] = removeNonBreakingSpace(value);
   });
 
   const price = await parsePrices(page);
+
+  if (!price) return null;
 
   return {
     id: productId,
@@ -69,26 +83,29 @@ const parsePSUpage = async (
     brand,
     description: description || undefined,
     officialWebsite: specs?.officialWebsite,
-    power: specs?.power,
-    formFactor: specs?.formFactor,
+    power: parseInt(specs?.power),
+    psuFormFactor: specs?.formFactor,
     PFC: specs?.PFC,
     efficiency: specs?.efficiency,
     coolingSystem: specs?.coolingSystem,
     fanSize: specs?.fanSize,
     fanBearings: specs?.fanBearing,
     certification: specs?.certification,
-    atx12vVersion: +specs?.aTX12VVersion,
+    atx12vVersion: specs?.aTX12VVersion,
     powerSupply: specs?.mBCPUPowerSupply,
-    SATA: +specs?.SATA,
-    MOLEX: +specs?.MOLEX,
-    PCIE8pin: +specs['pCIE8pin(6+2)'],
+    SATA: specs?.SATA,
+    MOLEX: specs?.MOLEX,
+    PCIE8pin: specs['pCIE8pin(6+2)'],
+    PCIE16pin: specs?.pCIE16pin,
     cableSystem: specs?.cableSystem,
     braidedWires: !specs?.braidedWires,
     mbCableLength: specs?.MB,
     cpuCableLength: specs?.CPU,
-    sataCableLength: specs?.SATADimensions,
-    molexCableLength: specs?.MOLEXDimensions,
-    PCIECableLength: specs['PCI-E'],
+    sataCableLength: specs?.SATACableLength,
+    molexCableLength: specs?.MOLEXCableLength,
+    PCIECableLength: specs?.['PCI-E'],
+    dimensions: specs?.['dimensions(HxWxD)'],
+    weight: specs?.weight,
   };
 };
 

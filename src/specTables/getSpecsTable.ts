@@ -1,32 +1,49 @@
-import { SpecBlock, GraphicsCard, Part, CategoryName } from '../../types';
+/* eslint-disable consistent-return */
+/* eslint-disable default-case */
+import {
+  SpecBlock,
+  GraphicsCard,
+  Part,
+  CategoryName,
+  CPU,
+  PSU,
+  RAM,
+  Motherboard,
+  HardDrive,
+  SolidStateDrive,
+  Case,
+  Cooling,
+} from '../../types';
+import formCaseSpecs from './caseSpecs';
+import formCoolingSpecs from './coolingSpecs';
+import formCPUSpecs from './cpuSpecs';
 import formGPUSpecs from './gpuSpecs';
+import formHDDSpecs from './hddSpecs';
+import formMotherboardSpecs from './motherboardSpecs';
+import formPSUSpecs from './psuSpecs';
+import formRAMSpecs from './ramSpecs';
+import formSSDSpecs from './ssdSpecs';
 
-const getSpecsTable = (
-  product: Part | undefined,
-  category: CategoryName,
-): SpecBlock[] | null => {
-  if (!product) return null;
+const getSpecsTable = (product: Part, category: CategoryName): SpecBlock[] => {
   switch (category) {
     case 'CPU':
-      return null;
+      return formCPUSpecs(product as CPU);
     case 'GPU':
       return formGPUSpecs(product as GraphicsCard);
     case 'HDD':
-      return null;
+      return formHDDSpecs(product as HardDrive);
     case 'SSD':
-      return null;
+      return formSSDSpecs(product as SolidStateDrive);
     case 'PSU':
-      return null;
+      return formPSUSpecs(product as PSU);
     case 'RAM':
-      return null;
+      return formRAMSpecs(product as RAM);
     case 'motherboard':
-      return null;
+      return formMotherboardSpecs(product as Motherboard);
     case 'case':
-      return null;
+      return formCaseSpecs(product as Case);
     case 'cooling':
-      return null;
-    default:
-      return null;
+      return formCoolingSpecs(product as Cooling);
   }
 };
 

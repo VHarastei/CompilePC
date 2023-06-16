@@ -8,6 +8,7 @@ import cleanSimpleTable from '../common/cleanSimpleTable';
 import cleanComplexTable from '../common/cleanComplexTable';
 import { removeNonBreakingSpace } from '../common/removeNonBreakingSpace';
 import parsePrices from '../common/parsePrices';
+import { ssdRegex } from '../common/constants';
 
 const parseSolidStateDrivePage = async (
   productId: string,
@@ -15,15 +16,25 @@ const parseSolidStateDrivePage = async (
 ): Promise<SolidStateDrive | null> => {
   const name = await parseElementText('.op1-tt', page);
 
+  if (!name) return null;
+
   const brand = await parseElementText('.path_lnk_brand', page);
+
+  if (!brand) return null;
 
   const mainImageContainer = await getParsingElement('.img200', page);
   const mainImage = await page.evaluate(
-    (el) => el.lastElementChild.getAttribute('srcset').split(' ')[0],
+    (el) => el.lastElementChild.getAttribute('src').split(' ')[0],
     mainImageContainer,
   );
 
-  const description = await parseElementInnerHTML('.conf-desc-ai-title', page);
+  if (!mainImage) return null;
+
+  const descriptionText = await parseElementText('.conf-desc-ai-title', page);
+
+  const description =
+    descriptionText &&
+    (await parseElementInnerHTML('.conf-desc-ai-title', page));
 
   const specsTable = await getParsingElement('#help_table', page);
 
@@ -41,7 +52,7 @@ const parseSolidStateDrivePage = async (
     return getNodeTreeText(node);
   }, specsTable);
 
-  if (!name || !mainImage || !rawSpecsTable || !brand) return null;
+  if (!rawSpecsTable) return null;
 
   const isTableSimple = !!(await page.$('.one-col'));
 
@@ -66,6 +77,17 @@ const parseSolidStateDrivePage = async (
 
   const price = await parsePrices(page);
 
+  if (!price) return null;
+
+  if (specs?.placement === 'external') return null;
+
+  if (!specs?.interface && !specs?.m2Interface) return null;
+
+  let ssdInterf =
+    specs?.m2Interface && specs?.m2Interface.match(ssdRegex)
+      ? 'PCI-E 4x'
+      : specs.interface;
+
   return {
     id: productId,
     name,
@@ -73,23 +95,26 @@ const parseSolidStateDrivePage = async (
     price,
     brand,
     description: description || undefined,
-    placement: specs.placement,
-    capacity: specs.size,
-    formFactor: specs.formFactor,
-    m2Interface: specs.m2Interface,
-    controller: specs.controller,
-    cacheMemory: specs.cacheMemory,
-    memoryType: specs.memoryType,
-    nVMe: specs.nVMe,
-    writeSpeed: specs.writeSpeed,
-    readSpeed: specs.readSpeed,
-    writeIOPS: specs.writeIOPS,
-    readIOPS: specs.readIOPS,
-    TBW: specs.TBW,
-    MTBF: specs.MTBF,
-    trim: !!!specs.TRIM,
-    size: specs.sizeDimensions,
-    weight: specs.weight,
+    placement: specs?.placement,
+    capacity: specs?.size,
+    formFactor: specs?.formFactor,
+    m2Interface: specs?.m2Interface,
+    interface: specs?.interface,
+    ssdInterface: ssdInterf,
+    controller: specs?.controller,
+    cacheMemory: specs?.cacheMemory,
+    memoryType: specs?.memoryType,
+    nVMe: specs?.nVMe,
+    material: specs?.material,
+    writeSpeed: specs?.writeSpeed,
+    readSpeed: specs?.readSpeed,
+    writeIOPS: specs?.writeIOPS,
+    readIOPS: specs?.readIOPS,
+    TBW: specs?.TBW,
+    MTBF: specs?.MTBF,
+    trim: !!!specs?.TRIM,
+    size: specs?.sizeDimensions,
+    weight: specs?.weight,
   };
 };
 

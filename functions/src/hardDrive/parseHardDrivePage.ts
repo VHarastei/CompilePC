@@ -15,15 +15,25 @@ const parseHardDrivePage = async (
 ): Promise<HardDrive | null> => {
   const name = await parseElementText('.op1-tt', page);
 
+  if (!name) return null;
+
   const brand = await parseElementText('.path_lnk_brand', page);
+
+  if (!brand) return null;
 
   const mainImageContainer = await getParsingElement('.img200', page);
   const mainImage = await page.evaluate(
-    (el) => el.lastElementChild.getAttribute('srcset').split(' ')[0],
+    (el) => el.lastElementChild.getAttribute('src').split(' ')[0],
     mainImageContainer,
   );
 
-  const description = await parseElementInnerHTML('.conf-desc-ai-title', page);
+  if (!mainImage) return null;
+
+  const descriptionText = await parseElementText('.conf-desc-ai-title', page);
+
+  const description =
+    descriptionText &&
+    (await parseElementInnerHTML('.conf-desc-ai-title', page));
 
   const specsTable = await getParsingElement('#help_table', page);
 
@@ -41,7 +51,7 @@ const parseHardDrivePage = async (
     return getNodeTreeText(node);
   }, specsTable);
 
-  if (!name || !mainImage || !rawSpecsTable || !brand) return null;
+  if (!rawSpecsTable) return null;
 
   const isTableSimple = !!(await page.$('.one-col'));
 
@@ -64,7 +74,13 @@ const parseHardDrivePage = async (
       : (specs[camelName] = removeNonBreakingSpace(value));
   });
 
+  if (specs?.placement === 'external') return null;
+
+  if (!specs?.interface) return null;
+
   const price = await parsePrices(page);
+
+  if (!price) return null;
 
   return {
     id: productId,
@@ -73,9 +89,13 @@ const parseHardDrivePage = async (
     price,
     brand,
     description: description || undefined,
-    placement: specs.placement,
+    // placement: specs.placement,
     type: specs.type,
     capacity: specs.size,
+    material: specs?.material,
+    plates: specs?.plates,
+    averageSearchTime: specs?.averageSearchTime,
+    driveInterface: specs?.interface,
     formFactor: specs.formFactor,
     cacheMemory: specs.cacheMemory,
     recordTechnology: specs.recordTechnology,

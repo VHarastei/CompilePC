@@ -1,7 +1,16 @@
-import { CollectionName, FullProduct, Part } from '../../types';
+import {
+  CollectionName,
+  CompatibleFilter,
+  Filter,
+  FullProduct,
+  Part,
+} from '../../types';
 import functions from '../common/firebaseFunctons';
 
-type Filter = Record<string, string | string[]>;
+type Response = {
+  result: Part[];
+  nextPage: number | null;
+};
 
 const Products = {
   get: async (
@@ -18,13 +27,19 @@ const Products = {
   list: async (
     collectionName: CollectionName,
     filter: Filter,
-  ): Promise<Part[]> => {
+    pageParam: number,
+    pageSize: number,
+    compatibleFilters: CompatibleFilter,
+  ): Promise<Response> => {
     const getProducts = functions.httpsCallable('getProducts');
-    const { data: products }: { data: Part[] } = await getProducts({
+    const { data: result }: { data: Response } = await getProducts({
       collectionName,
       filter,
+      pageParam,
+      pageSize,
+      compatibleFilters,
     });
-    return products;
+    return result;
   },
 };
 

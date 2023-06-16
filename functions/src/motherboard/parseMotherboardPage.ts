@@ -3,7 +3,7 @@ import { Motherboard, MotherboardFormFactor } from '../../../types';
 import { removeNonBreakingSpace } from '../common/removeNonBreakingSpace';
 import camelize from '../common/camelize';
 import cleanComplexTable from '../common/cleanComplexTable';
-import { xPathSelectors } from '../common/constants';
+import { ramTypes, ssdRegex, xPathSelectors } from '../common/constants';
 import getParsingElement from '../common/getParsingElement';
 import parseElementInnerHTML from '../common/parseElementInnerHTML';
 import parseElementText from '../common/parseElementText';
@@ -13,9 +13,14 @@ const parseMotherboardPage = async (
   productId: string,
   page: Page,
 ): Promise<Motherboard | null> => {
-  const description = await parseElementInnerHTML('.desc-ai-title', page);
+  const descriptionText = await parseElementText('.desc-ai-title', page);
+
+  const description =
+    descriptionText && (await parseElementInnerHTML('.desc-ai-title', page));
 
   const brand = await parseElementText('.path_lnk_brand', page);
+
+  if (!brand) return null;
 
   await page.waitForXPath(xPathSelectors.specificationButton);
   const anchor = (await page.$x(xPathSelectors.specificationButton)) as any;
@@ -26,11 +31,15 @@ const parseMotherboardPage = async (
 
   const name = await parseElementText('.op1-tt', page);
 
+  if (!name) return null;
+
   const mainImageContainer = await getParsingElement('.img200', page);
   const mainImage = await page.evaluate(
-    (el) => el.lastElementChild.getAttribute('srcset').split(' ')[0],
+    (el) => el.lastElementChild.getAttribute('src').split(' ')[0],
     mainImageContainer,
   );
+
+  if (!mainImage) return null;
 
   const specsTable = await getParsingElement('#help_table', page);
 
@@ -48,7 +57,7 @@ const parseMotherboardPage = async (
     return getNodeTreeText(node);
   }, specsTable);
 
-  if (!name || !mainImage || !rawSpecsTable || !brand) return null;
+  if (!rawSpecsTable) return null;
 
   const cleanedSpecsTable = cleanComplexTable(rawSpecsTable);
 
@@ -67,7 +76,29 @@ const parseMotherboardPage = async (
       : (specs[camelName] = removeNonBreakingSpace(value));
   });
 
+  const RAMType = ramTypes.filter((ramType) =>
+    Object.keys(specs).join('').includes(ramType),
+  );
+
+  if (!RAMType.length || RAMType.length > 1) return null;
+
   const price = await parsePrices(page);
+
+  if (!price) return null;
+
+  if (!specs.pCIExpress) return null;
+
+  const DriveInterfaces: string[] = [];
+
+  if (specs?.['sATA3(6Gbps)']) {
+    DriveInterfaces.push('SATA', 'SATA 2', 'SATA 3');
+  }
+
+  if (specs?.['M.2'] && specs?.['M.2'].match(ssdRegex)) {
+    DriveInterfaces.push('PCI-E 4x');
+  }
+
+  if (!DriveInterfaces.length) return null;
 
   return {
     id: productId,
@@ -95,9 +126,15 @@ const parseMotherboardPage = async (
     displayPortVersion: specs?.displayPortVersion,
     audiochip: specs?.audiochip,
     sound: specs?.['sound(Channels)'],
-    sata3: specs?.['sATA3(6Gbs)'],
+    sata3: specs?.['sATA3(6Gbps)'],
+    m2connector: specs?.m2Connector,
     m2: specs?.['M.2'],
-    PSI_E_16x: specs?.pCIE16xSlots,
+    driveInterfaces: DriveInterfaces,
+    lanRJ45: specs?.['LAN (RJ-45)'],
+    lanPorts: specs?.lANPorts,
+    lanController: specs?.lANController,
+    PCI_E_1x: specs?.['1xPCIESlots'],
+    PCI_E_16x: specs?.pCIE16xSlots,
     PCIExpressVerison: specs?.pCIExpress,
     ExternalUSB_2_0: specs?.['USB 2.0'],
     ExternalUSB_3_2_gen1: specs?.uSB32Gen1,
@@ -107,7 +144,9 @@ const parseMotherboardPage = async (
     InternalUSB_3_2_gen2: specs?.uSB32Gen2Internal,
     mainPowerSocket: specs?.mainPowerSocket,
     CPUPowerSocket: specs?.cPUPower,
-    FanPowerConnectors: specs?.FanPowerConnectors,
+    FanPowerConnectors: specs?.fanPowerConnectors,
+    ramType: RAMType[0],
+    interface: `PCI-E v${specs?.pCIExpress}`,
   };
 };
 

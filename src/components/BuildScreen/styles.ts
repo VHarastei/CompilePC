@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme: Theme) =>
     mainContainer: {
       display: 'flex',
       justifyContent: 'center',
-      marginTop: theme.spacing(16),
+      paddingTop: theme.spacing(5),
       gap: theme.spacing(8),
       '& .MuiPaper-root': {
         backgroundColor: theme.palette.backgroundGrey,

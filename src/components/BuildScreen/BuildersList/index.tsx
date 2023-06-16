@@ -1,10 +1,11 @@
 import React from 'react';
-import { Paper, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useSelector } from 'react-redux';
 import { selectBuilders } from '../../../store/builder/selectors';
 import BuilderModule from './BuilderModule';
 import useStyles from './styles';
+import ComparisonDrawer from '../../ComparisonScreen/ComparisonDrawer';
 
 const BuildersList = () => {
   const styles = useStyles();
@@ -31,12 +32,7 @@ const BuildersList = () => {
           Main Parts
         </Typography>
         <MainBuilder />
-      </Box>
-      <Box>
-        <Typography gutterBottom variant="h2">
-          Periphery
-        </Typography>
-        <Paper>biba</Paper>
+        <ComparisonDrawer />
       </Box>
     </Box>
   );

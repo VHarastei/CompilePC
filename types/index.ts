@@ -17,6 +17,8 @@ export type PriceRange = {
   maxPrice: number;
 };
 
+export type ParsedPrice = Price | null;
+
 export type Price = {
   offers: Offer[];
   range: PriceRange;
@@ -41,36 +43,42 @@ export type Store = {
 
 // collection CPUs
 export type CPU = Product & {
-  series?: string;
-  codeName?: string;
-  socket?: string;
-  litography?: string;
-  cores?: string;
-  threads?: string;
-  clockSpeed?: string;
-  turboBoost?: string;
+  series: string;
+  codeName: string;
+  socket: string;
+  lithography?: string;
+  cores: string;
+  threads: string;
+  clockSpeed: string;
+  turboBoost: string;
   l1Cache?: string;
-  l2Cache?: string;
-  l3Cache?: string;
-  IGP?: string;
-  TDP?: string;
-  PSIExpress?: string;
+  l2Cache: string;
+  l3Cache: string;
+  IGP: string;
+  TDP: string;
+  PCIExpress: string;
   maxOperatingTemperature?: string;
+  maxDDR3Speed?: string;
   maxDDR4Speed?: string;
+  maxDDR5Speed?: string;
   channels?: string;
+  ramType: string | string[];
 };
+
+export type Filter = Record<string, string | string[]>;
 
 // collection graphicsCards
 export type GraphicsCard = Product & {
   vendor: string;
   interface: string;
+  architecture?: string;
   GPUModel: string;
   memorySize: string;
   memoryType: string;
   memoryBus: string;
   GPUClockSpeed: string;
-  litography?: string;
-  maxResolution: string;
+  lithography?: string;
+  maxResolution?: string;
   HDMI: string;
   HDMIVersion: string;
   displayPort?: string;
@@ -79,12 +87,12 @@ export type GraphicsCard = Product & {
   openGL: string;
   isVRReady: boolean;
   streamProcessors: string;
-  textureUnits: string;
+  textureUnits?: string;
   monitorsConnection: string;
   cooling: string;
   fans: string;
   additionalPower: string;
-  minPSU: string;
+  power: number;
   numberOfSlots: string;
   size: string; // e.g. 200x123x38
 };
@@ -98,8 +106,8 @@ export type MotherboardFormFactor =
 
 // collection motherboards
 export type Motherboard = Product & {
-  socket?: string;
-  formFactor?: MotherboardFormFactor;
+  socket: string;
+  formFactor: MotherboardFormFactor;
   powerPhases?: string;
   VRMHeatsink?: boolean;
   size?: string; // e.g. 226x211 mm
@@ -117,10 +125,15 @@ export type Motherboard = Product & {
   displayPortVersion?: string;
   audiochip?: string;
   sound?: string;
-  sata3?: string;
-  m2?: string;
-  PSI_E_16x?: string;
-  PCIExpressVerison?: string;
+  sata3: string;
+  lanRJ45?: string;
+  lanPorts?: string;
+  lanController?: string;
+  m2connector: string;
+  m2: string;
+  PCI_E_1x?: string;
+  PCI_E_16x?: string;
+  PCIExpressVerison: string;
   ExternalUSB_2_0?: string;
   ExternalUSB_3_2_gen1?: string;
   ExternalUSB_3_2_gen2?: string;
@@ -130,6 +143,9 @@ export type Motherboard = Product & {
   mainPowerSocket?: string;
   CPUPowerSocket?: string;
   FanPowerConnectors?: string;
+  ramType: string;
+  interface: string;
+  driveInterfaces: string | string[];
 };
 
 // collection RAM
@@ -138,9 +154,10 @@ export type RAM = Product & {
   capacity: string;
   modules: string;
   formFactor: string;
-  type: string;
+  ramType: string;
   speed: string;
   clockSpeed: string;
+  casLatency: string;
   timing: string;
   voltage: string;
   cooling: string;
@@ -150,13 +167,17 @@ export type RAM = Product & {
 
 // collection hardDrives
 export type HardDrive = Product & {
-  placement: string;
+  // placement: string;
   type: string;
   capacity: string;
+  driveInterface: string;
   formFactor: string;
   cacheMemory: string;
   recordTechnology: string;
   RPM: string;
+  material?: string;
+  averageSearchTime?: string;
+  plates?: string;
   dataTransferRate: string;
   operationPowerConsumption: string;
   standbyPowerConsumption: string;
@@ -170,9 +191,12 @@ export type SolidStateDrive = Product & {
   placement: string;
   capacity: string;
   formFactor: string;
-  m2Interface: string;
+  m2Interface?: string;
+  interface?: string;
+  ssdInterface: string;
   controller: string;
-  cacheMemory: string;
+  cacheMemory?: string;
+  material?: string;
   memoryType: string;
   nVMe: string;
   writeSpeed: string;
@@ -191,31 +215,37 @@ export type Case = Product & {
   colour: string | undefined;
   target: string;
   mount: string;
-  motherboardFormFactor: string;
+  caseFormFactor?: string;
+  formFactor: string;
+  psuFormFactor: string;
+  fanMaxHeight?: string;
   boardPlacement: string;
-  psuMaxLength: string;
-  gpuMaxLength: string;
+  psuMaxLength?: string;
+  gpuMaxLength?: string;
   rubberFeet: boolean;
-  PSU: boolean;
+  integratedPSUPower?: string;
+  dimensions?: string;
   psuMount: string;
-  expansionSlots: number;
+  expansionSlots: string;
   openMechanism: string;
   fansTotal: string;
   fansInfo: Record<string, string>[];
-  fansMountTotal: number;
+  fansMountTotal: string;
   gridFrontPanel: boolean;
   dustFilter: boolean;
   liquidCoolingSupport: boolean;
-  liquidCoolingMountsTotal: number;
+  liquidCoolingMountsTotal: string;
   liquidPlacement: string;
   liquidCoolingInfo: Record<string, string>[];
-  usb32Gen1: number;
-  usb32Gen2: number;
-  usb20: number;
+  usb32Gen1: string;
+  usb32Gen2: string;
+  usbc32Gen2?: string;
+  usb20: string;
+  bays35?: string;
+  internal25Compartments?: string;
   audioPort: boolean;
   material: string;
   weight: string;
-  size: string;
   frontPanel: string;
 };
 
@@ -223,8 +253,8 @@ export type Case = Product & {
 export type Cooling = Product & {
   target: string;
   type: string;
-  fans: number;
-  heatPipes: number;
+  fans: string;
+  heatPipes: string;
   heatPipeContact: string;
   heatSinkMaterial: string;
   plateMaterial: string;
@@ -239,8 +269,8 @@ export type Cooling = Product & {
   maxTDP: string;
   airFlowDirection: string;
   replaceable: boolean;
-  staticPreasure: string;
-  lighting: boolean;
+  staticPressure: string;
+  lighting?: boolean;
   lightingColour: string;
   powerSource: string;
   minNoiseLevel: string;
@@ -252,36 +282,39 @@ export type Cooling = Product & {
 
 // collection PSUs
 export type PSU = Product & {
-  power: string;
-  formFactor: string;
-  PFC: string;
-  efficiency: string;
-  coolingSystem: string;
-  fanSize: string;
-  fanBearings: string;
-  certification: string;
-  atx12vVersion: number;
-  powerSupply: string;
-  SATA: number;
-  MOLEX: number;
-  PCIE8pin: number;
-  cableSystem: string;
-  braidedWires: boolean;
-  mbCableLength: string;
-  cpuCableLength: string;
-  sataCableLength: string;
-  molexCableLength: string;
-  PCIECableLength: string;
+  power: number;
+  psuFormFactor: string;
+  PFC?: string;
+  efficiency?: string;
+  coolingSystem?: string;
+  fanSize?: string;
+  fanBearings?: string;
+  certification?: string;
+  atx12vVersion?: string;
+  powerSupply?: string;
+  SATA?: string;
+  MOLEX?: string;
+  PCIE8pin?: string;
+  PCIE16pin?: string;
+  cableSystem?: string;
+  braidedWires?: boolean;
+  mbCableLength?: string;
+  cpuCableLength?: string;
+  sataCableLength?: string;
+  molexCableLength?: string;
+  PCIECableLength?: string;
+  dimensions?: string;
+  weight?: string;
 };
 
 export type CategoryName = keyof typeof ProductCategories;
 
 // Product builders
 export type BuilderCategory =
-  typeof ProductCategories[CategoryName]['builderTitle'];
+  (typeof ProductCategories)[CategoryName]['builderTitle'];
 
 export type CollectionName =
-  typeof ProductCategories[CategoryName]['collectionName'];
+  (typeof ProductCategories)[CategoryName]['collectionName'];
 
 export type Part =
   | CPU
@@ -294,7 +327,14 @@ export type Part =
   | Cooling
   | PSU;
 
-export type Spec = { title: string; value: string | boolean | number };
+export type FullProduct = Part & {
+  stores: Store[];
+};
+
+export type Spec = {
+  title: string;
+  value: string | boolean | number | undefined;
+};
 
 export type SpecBlock = {
   name: string;
@@ -308,10 +348,6 @@ export type ProductCategory = {
 };
 
 export type ShortSpec = { name: string; value?: string };
-
-export type FullProduct = Product & {
-  stores: Store[];
-};
 
 export type Assembly = {
   CPU: CPU | null;
@@ -332,4 +368,36 @@ export type Builder = {
   builderTitle: BuilderCategory;
   collectionName: CollectionName;
   filter: SelectedFilter;
+};
+
+export type Comparison = {
+  CPU: CPU[];
+  GPU: GraphicsCard[];
+  PSU: PSU[];
+  RAM: RAM[];
+  case: Case[];
+  cooling: Cooling[];
+  motherboard: Motherboard[];
+  SSD: SolidStateDrive[];
+  HDD: HardDrive[];
+};
+
+export type CompatibleFilter = {
+  CPU: Pick<CPU, 'socket' | 'ramType'> | null;
+  GPU: Pick<GraphicsCard, 'interface' | 'power'> | null;
+  PSU: Pick<PSU, 'power' | 'psuFormFactor'> | null;
+  RAM: Pick<RAM, 'ramType'> | null;
+  case: Pick<Case, 'formFactor' | 'psuFormFactor'> | null;
+  cooling: Pick<Cooling, 'socket'> | null;
+  motherboard: Pick<
+    Motherboard,
+    'socket' | 'formFactor' | 'driveInterfaces' | 'ramType' | 'interface'
+  > | null;
+  SSD: Pick<SolidStateDrive, 'ssdInterface'> | null;
+  HDD: Pick<HardDrive, 'driveInterface'> | null;
+};
+
+export type CategorySpec = {
+  title: string;
+  values: (string | boolean | null | number)[];
 };

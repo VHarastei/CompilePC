@@ -5,15 +5,18 @@ import camelize from '../common/camelize';
 import cleanComplexTable from '../common/cleanComplexTable';
 import { xPathSelectors } from '../common/constants';
 import getParsingElement from '../common/getParsingElement';
-import parseElementInnerHTML from '../common/parseElementInnerHTML';
 import parseElementText from '../common/parseElementText';
 import parsePrices from '../common/parsePrices';
+import parseElementInnerHTML from '../common/parseElementInnerHTML';
 
 const parseCoolingPage = async (
   productId: string,
   page: Page,
 ): Promise<Cooling | null> => {
-  const description = await parseElementInnerHTML('.desc-ai-title', page);
+  const descriptionText = await parseElementText('.desc-ai-title', page);
+
+  const description =
+    descriptionText && (await parseElementInnerHTML('.desc-ai-title', page));
 
   await page.waitForXPath(xPathSelectors.specificationButton);
   const anchor = (await page.$x(xPathSelectors.specificationButton)) as any;
@@ -24,13 +27,20 @@ const parseCoolingPage = async (
 
   const name = await parseElementText('.op1-tt', page);
 
+  if (!name) return null;
+
   const brand = await parseElementText('.path_lnk_brand', page);
 
+  if (!brand) return null;
+
   const mainImageContainer = await getParsingElement('.img200', page);
+
   const mainImage = await page.evaluate(
-    (el) => el.lastElementChild.getAttribute('srcset').split(' ')[0],
+    (el) => el.lastElementChild.getAttribute('src').split(' ')[0],
     mainImageContainer,
   );
+
+  if (!mainImage) return null;
 
   const specsTable = await getParsingElement('#help_table', page);
 
@@ -47,7 +57,7 @@ const parseCoolingPage = async (
     return getNodeTreeText(node);
   }, specsTable);
 
-  if (!name || !mainImage || !rawSpecsTable || !brand) return null;
+  if (!rawSpecsTable) return null;
 
   const cleanedSpecsTable = cleanComplexTable(rawSpecsTable);
 
@@ -62,7 +72,63 @@ const parseCoolingPage = async (
     specs[camelName] = removeNonBreakingSpace(value);
   });
 
-  const sockets = specs.socket?.split(',');
+  let sockets = specs.socket?.split(',');
+
+  if (!sockets) return null;
+
+  const normalizeSocket = (socket: string) =>
+    socket.includes(' / ') ? socket.replace(' / ', '/') : socket;
+
+  const normalizeVersion = (sockets: string[]) => {
+    // only if sockets has one item like "v1" / "v2"
+
+    let check = sockets.find((socket: string) => socket.includes('v'));
+
+    if (check) {
+      let index = sockets.indexOf(check);
+
+      sockets.splice(index - 1, 2, `${sockets[index - 1]} ${check}`);
+    }
+
+    return sockets;
+  };
+
+  const normalizedSockets = sockets.map((socket) => {
+    return normalizeSocket(socket)
+      .trim()
+      .split(' ')
+      .map((socket) => {
+        if (socket.includes('/')) {
+          let socketArr: string[] = socket.split('/');
+          return socketArr;
+        }
+        return socket;
+      })
+      .flat(1);
+  });
+
+  const normalizedVersionSockets = normalizedSockets.map((socket) =>
+    normalizeVersion(socket),
+  );
+
+  const completeSockets = normalizedVersionSockets
+    .map((socketArr) => {
+      let socketName = socketArr[0];
+
+      let socket = socketArr.reduce((acc: string[], curr, index) => {
+        if (!index) return acc;
+
+        acc.push(
+          socketName === 'Intel'
+            ? socketName + ' ' + 'LGA ' + curr
+            : socketName + ' ' + curr,
+        );
+        return acc;
+      }, []);
+
+      return socket;
+    })
+    .flat(1);
 
   await page.waitForXPath(xPathSelectors.pricesButton);
   const pricePageAnchor = (await page.$x(xPathSelectors.pricesButton)) as any;
@@ -72,6 +138,8 @@ const parseCoolingPage = async (
   ]);
 
   const price = await parsePrices(page);
+
+  if (!price) return null;
 
   return {
     id: productId,
@@ -83,13 +151,13 @@ const parseCoolingPage = async (
     officialWebsite: specs?.officialWebsite,
     target: specs?.features,
     type: specs?.productType,
-    fans: +specs?.fans,
-    heatPipes: +specs?.heatPipes,
-    heatPipeContact: specs?.heatPipeContact,
-    heatSinkMaterial: specs?.heatSinkMaterial,
+    fans: specs?.numberOfFans,
+    heatPipes: specs?.heatPipes,
+    heatPipeContact: specs?.heatpipeContact,
+    heatSinkMaterial: specs?.heatsinkMaterial,
     plateMaterial: specs?.plateMaterial,
     mountType: specs?.mountType,
-    socket: sockets,
+    socket: completeSockets,
     fanSize: specs?.fanSize,
     bearing: specs?.bearing,
     minRPM: specs?.minRPM,
@@ -99,7 +167,7 @@ const parseCoolingPage = async (
     maxTDP: specs?.maxTDP,
     airFlowDirection: specs?.airFlowDirection,
     replaceable: !specs?.replaceable,
-    staticPreasure: specs?.staticPreasure,
+    staticPressure: specs?.staticPressure,
     lighting: !specs?.lighting,
     lightingColour: specs?.lightingColour,
     powerSource: specs?.powerSource,

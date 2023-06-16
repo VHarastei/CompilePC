@@ -14,15 +14,25 @@ const parseGraphicsCardPage = async (
 ): Promise<GraphicsCard | null> => {
   const name = await parseElementText('.op1-tt', page);
 
+  if (!name) return null;
+
   const vendor = await parseElementText('.path_lnk_brand', page);
+
+  if (!vendor) return null;
 
   const mainImageContainer = await getParsingElement('.img200', page);
   const mainImage = await page.evaluate(
-    (el) => el.lastElementChild.getAttribute('srcset').split(' ')[0],
+    (el) => el.lastElementChild.getAttribute('src').split(' ')[0],
     mainImageContainer,
   );
 
-  const description = await parseElementInnerHTML('.conf-desc-ai-title', page);
+  if (!mainImage) return null;
+
+  const descriptionText = await parseElementText('.conf-desc-ai-title', page);
+
+  const description =
+    descriptionText &&
+    (await parseElementInnerHTML('.conf-desc-ai-title', page));
 
   const specsTable = await getParsingElement('#help_table', page);
 
@@ -40,7 +50,7 @@ const parseGraphicsCardPage = async (
     return getNodeTreeText(node);
   }, specsTable);
 
-  if (!name || !mainImage || !rawSpecsTable || !vendor) return null;
+  if (!rawSpecsTable) return null;
 
   const cleanedSpecsTable = cleanComplexTable(rawSpecsTable);
 
@@ -58,9 +68,15 @@ const parseGraphicsCardPage = async (
     specs[camelName] = removeNonBreakingSpace(value);
   });
 
+  const brand = specs.gPUModel.split(' ')[0];
+
   const price = await parsePrices(page);
 
-  const brand = specs.gPUModel.split(' ')[0];
+  if (!price) return null;
+
+  if (!specs.minimumPSURecommendation) return null;
+
+  if (!specs.interface) return null;
 
   return {
     id: productId,
@@ -72,11 +88,12 @@ const parseGraphicsCardPage = async (
     description: description || undefined,
     interface: specs?.interface,
     GPUModel: specs?.gPUModel,
+    architecture: specs?.architecture,
     memorySize: specs?.memorySize,
     memoryType: specs?.memoryType,
     memoryBus: specs?.memoryBus,
     GPUClockSpeed: specs?.gPUClockSpeed,
-    litography: specs?.litography,
+    lithography: specs?.lithography,
     maxResolution: specs?.maxResolution,
     HDMI: specs?.HDMI,
     HDMIVersion: specs?.hDMIVersion,
@@ -91,7 +108,7 @@ const parseGraphicsCardPage = async (
     cooling: specs?.cooling,
     fans: specs?.fans,
     additionalPower: specs?.additionalPower,
-    minPSU: specs?.minimumPSURecommendation,
+    power: parseInt(specs?.minimumPSURecommendation),
     numberOfSlots: specs?.numberOfSlots,
     // taken from e-katalog: Length	200 mm / 200x123x38 /
     size: specs?.length,

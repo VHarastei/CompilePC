@@ -1,8 +1,9 @@
 import { Page } from 'puppeteer';
 import { xPathSelectors } from './constants';
 import updateStoresCollection from './updateStoreCollection';
+import { ParsedPrice } from '../../../types';
 
-const parsePrices = async (page: Page) => {
+const parsePrices = async (page: Page): Promise<ParsedPrice> => {
   await page.waitForXPath(xPathSelectors.pricesButton);
   const pricePageAnchor = await page.$x(xPathSelectors.pricesButton);
   await Promise.all([
@@ -47,6 +48,8 @@ const parsePrices = async (page: Page) => {
     });
     return stores;
   });
+
+  if (!storeNames.length) return null;
 
   const storeImageUrls = await page.evaluate(async () => {
     const urls: string[] = [];
